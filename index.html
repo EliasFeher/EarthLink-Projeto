@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earth Link | Reator de Algas</title>
+    <meta name="description"
+        content="Earth Link: projeto educativo de um reator de algas que une biotecnologia, oceanos e sustentabilidade.">
+    <meta name="theme-color" content="#071b20">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23071b20'/%3E%3Ccircle cx='16' cy='17' r='10' fill='%235fb336' stroke='%230a140d' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='5.5' fill='%23fff'/%3E%3Ccircle cx='17' cy='15.5' r='2.6' fill='%235ab04a'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="style.css?v=1791992006">
+</head>
+
+<body>
+    <div class="progress" id="progress"></div>
+
+    <header class="navbar">
+        <div class="container nav-inner">
+            <a class="logo" href="#inicio" aria-label="Earth Link, início">
+                <svg viewBox="0 0 32 32" aria-hidden="true">
+                    <path d="M11 8 8 2M21 8l3-6" stroke="#a2f05e" stroke-width="2" stroke-linecap="round" />
+                    <ellipse cx="16" cy="19" rx="12" ry="11" fill="#4aaa3c" stroke="#14451e" stroke-width="2.5" />
+                    <ellipse cx="16" cy="17" rx="7" ry="7.5" fill="#fff" stroke="#03100c" stroke-width="2" />
+                    <circle cx="17.5" cy="18" r="3.5" fill="#5ab04a" />
+                    <circle cx="17.8" cy="18" r="1.7" fill="#03100c" />
+                </svg>
+                EARTH LINK
+            </a>
+            <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false"
+                aria-controls="navLinks"><span></span></button>
+            <nav class="nav-links" id="navLinks" aria-label="Principal">
+                <a href="#reator">O reator</a>
+                <a href="#simulador">Simulador</a>
+                <a href="#graficos">Gráficos</a>
+                <a href="#modelo">Modelo 3D</a>
+                <a href="#relatorio">Relatório</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contato" class="nav-cta">Encomendar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section id="inicio" class="hero">
+            <div class="container hero-grid">
+                <div class="hero-texto">
+                    <span class="etiqueta reveal">Biotecnologia · Oceanos · Sustentabilidade</span>
+                    <h1 class="reveal" style="--d:.08s">Uma ideia pequena.<br><span class="accent">Um impacto gigante.</span></h1>
+                    <p class="reveal" style="--d:.16s">
+                        Conheça o Earth Link: um reator de algas inspirado nos microrganismos que sustentam os
+                        ecossistemas oceânicos e produzem boa parte do oxigênio que respiramos.
+                    </p>
+                    <div class="hero-acoes reveal" style="--d:.24s">
+                        <a href="#reator" class="botao">Conheça o projeto</a>
+                        <a href="#modelo" class="botao botao-ghost">Ver o Plankton em 3D</a>
+                    </div>
+                </div>
+                <div class="hero-visual reveal" style="--d:.15s">
+                    <svg id="heroSvg" viewBox="0 0 440 440" role="img" aria-label="Plankton, o vilão verde de um olho só, em uma cena animada ao lado de um reator de algas">
+                        <defs>
+                            <clipPath id="tubo"><rect x="290" y="150" width="110" height="220" rx="26" /></clipPath>
+                            <clipPath id="olhoClip"><ellipse cx="143" cy="222" rx="45" ry="47" /></clipPath>
+                            <clipPath id="bodyClip"><path d="M143 178C104 178 86 214 84 258C82 304 100 336 143 336C186 336 204 304 202 258C200 214 182 178 143 178z" /></clipPath>
+                            <!-- tremida de traço feito à mão (a semente muda a cada quadro) -->
+                            <filter id="boil" x="-8%" y="-8%" width="116%" height="116%">
+                                <feTurbulence id="boilT" type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="1" result="n" />
+                                <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
+                            </filter>
+                        </defs>
+
+                        <!-- balão de fala (texto digitado pela cena) -->
+                        <g id="fala" class="fala off">
+                            <path d="M40 24h210a16 16 0 0 1 16 16v44a16 16 0 0 1-16 16h-120l-30 26 6-26H40a16 16 0 0 1-16-16V40a16 16 0 0 1 16-16z" fill="#e9f8f4" stroke="#03100c" stroke-width="5" stroke-linejoin="round" />
+                            <text text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="20">
+                                <tspan id="fala1" x="145" y="56" fill="#03100c"></tspan>
+                                <tspan id="fala2" x="145" y="82" fill="#2f7a1f"></tspan>
+                            </text>
+                        </g>
+
+                        <g id="scene" filter="url(#boil)">
+                            <!-- reator -->
+                            <rect x="312" y="128" width="66" height="28" rx="8" fill="#9aa59a" stroke="#03100c" stroke-width="5" />
+                            <g clip-path="url(#tubo)">
+                                <rect x="290" y="150" width="110" height="220" fill="#d9ecd0" />
+                                <g class="tubo-liquido"><path d="M280 205q22-12 45 0t45 0t45 0V380H280z" fill="#5fb336" /></g>
+                                <circle class="bolha" style="--bd:0s" cx="318" cy="340" r="7" fill="#e9f8f4" stroke="#03100c" stroke-width="3" />
+                                <circle class="bolha" style="--bd:1.3s" cx="350" cy="350" r="9" fill="#e9f8f4" stroke="#03100c" stroke-width="3" />
+                                <circle class="bolha" style="--bd:2.6s" cx="375" cy="335" r="6" fill="#e9f8f4" stroke="#03100c" stroke-width="3" />
+                                <circle class="bolha" style="--bd:.7s" cx="338" cy="360" r="5" fill="#e9f8f4" stroke="#03100c" stroke-width="3" />
+                            </g>
+                            <rect x="290" y="150" width="110" height="220" rx="26" fill="none" stroke="#03100c" stroke-width="6" />
+                            <rect x="276" y="364" width="138" height="34" rx="12" fill="#e0443e" stroke="#03100c" stroke-width="6" />
+                            <circle class="led" cx="302" cy="381" r="6" fill="#ffd23f" stroke="#03100c" stroke-width="2" />
+                            <circle class="led l2" cx="326" cy="381" r="6" fill="#4fc3c3" stroke="#03100c" stroke-width="2" />
+
+                            <!-- sombra no chão -->
+                            <ellipse id="pShadow" cx="143" cy="397" rx="58" ry="8" fill="#000" opacity=".35" />
+
+                            <!-- Plankton (rig controlado por JS) -->
+                            <g id="plkRig" stroke="#14451e" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M124 328 119 388M162 328l5 60" stroke-width="6" fill="none" stroke="#1f6b2a" />
+                                <ellipse cx="106" cy="392" rx="16" ry="6.5" fill="#1f6b2a" stroke="none" />
+                                <ellipse cx="179" cy="392" rx="16" ry="6.5" fill="#1f6b2a" stroke="none" />
+
+                                <!-- antenas com mola -->
+                                <path id="antLp" d="M126 186Q110 150 96 120" stroke-width="4.5" fill="none" stroke="#1f6b2a" />
+                                <circle id="antLc" cx="94" cy="115" r="7" fill="#4aaa3c" stroke-width="3.5" />
+                                <path id="antRp" d="M160 186Q178 150 192 116" stroke-width="4.5" fill="none" stroke="#1f6b2a" />
+                                <circle id="antRc" cx="194" cy="111" r="7" fill="#4aaa3c" stroke-width="3.5" />
+
+                                <!-- corpo + sombreado de cel -->
+                                <path d="M143 178C104 178 86 214 84 258C82 304 100 336 143 336C186 336 204 304 202 258C200 214 182 178 143 178z" fill="#4aaa3c" stroke="none" />
+                                <g clip-path="url(#bodyClip)" stroke="none">
+                                    <path d="M176 188C208 222 216 304 166 342L214 342 218 176z" fill="#1f6b2a" opacity=".38" />
+                                    <ellipse cx="108" cy="262" rx="9" ry="34" transform="rotate(-12 108 262)" fill="#a5f070" opacity=".38" />
+                                    <circle cx="104" cy="300" r="5" fill="#1f6b2a" />
+                                    <circle cx="186" cy="290" r="6" fill="#1f6b2a" />
+                                    <circle cx="160" cy="320" r="4" fill="#1f6b2a" />
+                                </g>
+                                <path d="M143 178C104 178 86 214 84 258C82 304 100 336 143 336C186 336 204 304 202 258C200 214 182 178 143 178z" fill="none" stroke-width="5.5" />
+
+                                <!-- olho -->
+                                <ellipse cx="143" cy="222" rx="45" ry="47" fill="#fff" stroke="none" />
+                                <g clip-path="url(#olhoClip)">
+                                    <g id="hIris">
+                                        <circle cx="150" cy="240" r="24" fill="#5ab04a" stroke-width="3" />
+                                        <circle id="hPupil" cx="152" cy="240" r="12" fill="#000" stroke="none" />
+                                        <circle cx="158" cy="233" r="4.5" fill="#fff" stroke="none" />
+                                    </g>
+                                    <polygon id="hHood" points="90,170 200,170 200,226 90,198" fill="#1f6b2a" stroke="none" />
+                                    <path id="hHoodLine" d="M90 198 200 226" stroke-width="4" fill="none" />
+                                    <polygon id="hLower" points="90,290 200,290 200,275 90,275" fill="#2f7a1f" stroke="none" />
+                                    <path id="hLowerLine" d="M90 275 200 275" stroke-width="3.5" fill="none" />
+                                    <rect id="hBlink" x="90" y="170" width="110" height="104" fill="#2f7a1f" stroke="none" transform="translate(0 170) scale(1 0.001) translate(0 -170)" />
+                                </g>
+                                <ellipse cx="143" cy="222" rx="45" ry="47" fill="none" stroke-width="5" />
+
+                                <!-- bocas (uma por vez, trocadas quadro a quadro) -->
+                                <g id="hMouth">
+                                    <g id="m_smirk"><path d="M118 292Q146 312 172 290" stroke-width="4.5" fill="none" /><path d="M170 289l7-4" stroke-width="3.5" fill="none" /></g>
+                                    <g id="m_flat" display="none"><path d="M122 300Q146 303 170 298" stroke-width="4.5" fill="none" /></g>
+                                    <g id="m_open" display="none"><path d="M120 292Q146 324 172 290Q146 300 120 292z" fill="#12331a" stroke-width="3" /></g>
+                                    <g id="m_o" display="none"><ellipse cx="146" cy="304" rx="9" ry="11" fill="#12331a" stroke-width="3" /></g>
+                                    <g id="m_laugh1" display="none">
+                                        <path d="M110 288Q146 346 182 286Q146 296 110 288z" fill="#12331a" stroke-width="3.5" />
+                                        <path d="M126 312Q146 330 166 312Q146 318 126 312z" fill="#e0646e" stroke="none" />
+                                        <path d="M122 291Q146 300 170 290L170 296Q146 305 122 297z" fill="#fff" stroke="none" />
+                                    </g>
+                                    <g id="m_laugh2" display="none">
+                                        <path d="M116 290Q146 330 176 288Q146 297 116 290z" fill="#12331a" stroke-width="3.5" />
+                                        <path d="M130 306Q146 320 162 306Q146 311 130 306z" fill="#e0646e" stroke="none" />
+                                        <path d="M124 291Q146 298 168 290L168 295Q146 303 124 296z" fill="#fff" stroke="none" />
+                                    </g>
+                                </g>
+
+                                <!-- braços por cima (para esfregar as mãos na frente) -->
+                                <path id="armL" d="M92 282Q60 276 52 236" stroke-width="6" fill="none" stroke="#1f6b2a" />
+                                <circle id="handL" cx="51" cy="230" r="8.5" fill="#4aaa3c" stroke-width="3.5" />
+                                <path id="armR" d="M196 282Q236 292 268 264" stroke-width="6" fill="none" stroke="#1f6b2a" />
+                                <circle id="handR" cx="272" cy="260" r="8.5" fill="#4aaa3c" stroke-width="3.5" />
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- REATOR -->
+        <section id="reator" class="section">
+            <div class="container">
+                <div class="split">
+                    <div class="reveal reator-texto">
+                        <span class="etiqueta">01 · Proposta</span>
+                        <h2>O reator de <span class="accent">algas</span></h2>
+                        <h3>Tecnologia a serviço dos ecossistemas</h3>
+                        <p>O reator é um recipiente projetado para manter condições adequadas ao cultivo de algas. No
+                            projeto, ele permite observar como luz, temperatura e pH influenciam o crescimento.</p>
+                        <p>A ideia do Earth Link é aproximar tecnologia e sustentabilidade, apresentando uma alternativa
+                            para estudar organismos essenciais aos ecossistemas.</p>
+                    </div>
+                    <div class="card reator-fig reveal" style="--d:.12s">
+                        <svg id="rfSvg" viewBox="0 56 440 296" role="img" aria-label="Um pote de vidro com algas sorridentes recebendo luz do sol e bolhas de ar, com o Plankton observando" font-family="Space Grotesk,Inter,sans-serif" font-weight="700">
+                            <defs>
+                                <clipPath id="rfJar"><rect x="140" y="90" width="150" height="230" rx="34" /></clipPath>
+                                <clipPath id="rfEyeClip"><ellipse cx="143" cy="222" rx="45" ry="47" /></clipPath>
+                                <clipPath id="rfBodyClip"><path d="M143 178C104 178 86 214 84 258C82 304 100 336 143 336C186 336 204 304 202 258C200 214 182 178 143 178z" /></clipPath>
+                                <linearGradient id="rfLiq" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0" stop-color="#63b838" />
+                                    <stop offset="1" stop-color="#2c7a2a" />
+                                </linearGradient>
+                            </defs>
+
+                            <ellipse cx="220" cy="333" rx="190" ry="9" fill="#000" opacity=".22" />
+
+                            <!-- raios de luz -->
+                            <g fill="#ffc857">
+                                <polygon class="rf-ray" style="--d:0s" points="84,112 140,104 140,176" />
+                                <polygon class="rf-ray" style="--d:.8s" points="84,120 140,172 140,250" />
+                                <polygon class="rf-ray" style="--d:1.6s" points="80,128 140,246 140,308" />
+                            </g>
+
+                            <!-- solzinho simpático -->
+                            <g transform="translate(62 118)">
+                                <g class="rf-sun" stroke="#ffc857" stroke-width="4.5" stroke-linecap="round"><line x1="30.0" y1="0.0" x2="41.0" y2="0.0" /><line x1="24.3" y1="17.6" x2="33.2" y2="24.1" /><line x1="9.3" y1="28.5" x2="12.7" y2="39.0" /><line x1="-9.3" y1="28.5" x2="-12.7" y2="39.0" /><line x1="-24.3" y1="17.6" x2="-33.2" y2="24.1" /><line x1="-30.0" y1="0.0" x2="-41.0" y2="0.0" /><line x1="-24.3" y1="-17.6" x2="-33.2" y2="-24.1" /><line x1="-9.3" y1="-28.5" x2="-12.7" y2="-39.0" /><line x1="9.3" y1="-28.5" x2="12.7" y2="-39.0" /><line x1="24.3" y1="-17.6" x2="33.2" y2="-24.1" /></g>
+                                <circle r="22" fill="#ffc857" />
+                                <circle cx="-7" cy="-4" r="2.6" fill="#7a4b00" />
+                                <circle cx="7" cy="-4" r="2.6" fill="#7a4b00" />
+                                <path d="M-9 6Q0 15 9 6" fill="none" stroke="#7a4b00" stroke-width="2.6" stroke-linecap="round" />
+                                <circle cx="-14" cy="5" r="3.4" fill="#ff8a65" opacity=".55" />
+                                <circle cx="14" cy="5" r="3.4" fill="#ff8a65" opacity=".55" />
+                            </g>
+                            <text x="62" y="180" text-anchor="middle" font-size="16" fill="#ffc857">Luz</text>
+                            <path d="M44 188q4.5-5 9 0t9 0t9 0t9 0" fill="none" stroke="#ffc857" stroke-width="2.2" stroke-linecap="round" />
+
+                            <!-- pote de vidro -->
+                            <rect x="140" y="90" width="150" height="230" rx="34" fill="#0a2227" />
+                            <g clip-path="url(#rfJar)">
+                                <g class="rf-wave-b"><path d="M70 140q17.5-9 35 0t35 0t35 0t35 0t35 0t35 0t35 0t35 0t35 0t35 0V330H70z" fill="#8fd458" opacity=".7" /></g>
+                                <g class="rf-wave"><path d="M70 148q17.5-9 35 0t35 0t35 0t35 0t35 0t35 0t35 0t35 0t35 0t35 0V330H70z" fill="url(#rfLiq)" /></g>
+                                <g transform="translate(172 204)"><g class="rf-cell" style="--t:7s;--dx:8px;--dy:-9px;--d:0s">
+                                    <circle r="9" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-3.8" cy="-4.5" r="1.8" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:0s"><circle cx="-3.1" cy="-1.1" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="3.1" cy="-1.1" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-3.4 2.7Q0 7.0 3.4 2.7" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(214 184)"><g class="rf-cell" style="--t:8s;--dx:-7px;--dy:8px;--d:-2s">
+                                    <circle r="7" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-2.9" cy="-3.5" r="1.4" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-2s"><circle cx="-2.4" cy="-0.8" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="2.4" cy="-0.8" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-2.7 2.1Q0 5.5 2.7 2.1" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(254 216)"><g class="rf-cell" style="--t:9s;--dx:9px;--dy:-10px;--d:-4s">
+                                    <circle r="10" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-4.2" cy="-5.0" r="2.0" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-4s"><circle cx="-3.4" cy="-1.2" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="3.4" cy="-1.2" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-3.8 3.0Q0 7.8 3.8 3.0" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(192 266)"><g class="rf-cell" style="--t:6.5s;--dx:-8px;--dy:9px;--d:-3s">
+                                    <circle r="8" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-3.4" cy="-4.0" r="1.6" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-3s"><circle cx="-2.7" cy="-1.0" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="2.7" cy="-1.0" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-3.0 2.4Q0 6.2 3.0 2.4" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(238 280)"><g class="rf-cell" style="--t:7.5s;--dx:7px;--dy:-8px;--d:-1s">
+                                    <circle r="9" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-3.8" cy="-4.5" r="1.8" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-1s"><circle cx="-3.1" cy="-1.1" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="3.1" cy="-1.1" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-3.4 2.7Q0 7.0 3.4 2.7" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(268 172)"><g class="rf-cell" style="--t:8.5s;--dx:-6px;--dy:7px;--d:-5s">
+                                    <circle r="7" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-2.9" cy="-3.5" r="1.4" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-5s"><circle cx="-2.4" cy="-0.8" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="2.4" cy="-0.8" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-2.7 2.1Q0 5.5 2.7 2.1" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(166 302)"><g class="rf-cell" style="--t:9s;--dx:8px;--dy:-9px;--d:-6s">
+                                    <circle r="7" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-2.9" cy="-3.5" r="1.4" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-6s"><circle cx="-2.4" cy="-0.8" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="2.4" cy="-0.8" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-2.7 2.1Q0 5.5 2.7 2.1" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                <g transform="translate(212 232)"><g class="rf-cell" style="--t:7s;--dx:-7px;--dy:8px;--d:-2.5s">
+                                    <circle r="6" fill="#3f9e36" stroke="#14451e" stroke-width="2" />
+                                    <circle cx="-2.5" cy="-3.0" r="1.2" fill="#fff" opacity=".45" stroke="none" />
+                                    <g class="rf-eyes" style="--d:-2.5s"><circle cx="-2.0" cy="-0.7" r="1.7" fill="#0b2a14" stroke="none" /><circle cx="2.0" cy="-0.7" r="1.7" fill="#0b2a14" stroke="none" /></g>
+                                    <path d="M-2.3 1.8Q0 4.7 2.3 1.8" fill="none" stroke="#0b2a14" stroke-width="1.6" />
+                                </g></g>
+                                
+                                <g fill="rgba(233,248,244,.35)" stroke="#e9f8f4" stroke-width="1.5">
+                                    <circle class="rf-bub" style="--t:4.2s;--d:0s" cx="166" cy="312" r="3.5" />
+                                    <circle class="rf-bub" style="--t:3.6s;--d:1.2s" cx="186" cy="312" r="4.5" />
+                                    <circle class="rf-bub" style="--t:4.6s;--d:2.2s" cx="206" cy="312" r="3" />
+                                    <circle class="rf-bub" style="--t:3.9s;--d:0.6s" cx="226" cy="312" r="4" />
+                                    <circle class="rf-bub" style="--t:4.4s;--d:1.8s" cx="246" cy="312" r="3.2" />
+                                    <circle class="rf-bub" style="--t:3.7s;--d:2.9s" cx="262" cy="312" r="2.6" />
+                                    <circle class="rf-bub" style="--t:4.1s;--d:3.3s" cx="196" cy="312" r="2.6" />
+                                    </g>
+                            </g>
+                            <rect x="140" y="90" width="150" height="230" rx="34" fill="none" stroke="#7fd1b4" stroke-width="3.5" />
+                            <rect x="152" y="110" width="8" height="110" rx="4" fill="#fff" opacity=".13" />
+                            <rect x="158" y="72" width="114" height="20" rx="8" fill="#2f7a4a" stroke="#14451e" stroke-width="2.5" />
+
+                            <!-- legenda: ar -->
+                            <text x="84" y="304" text-anchor="middle" font-size="16" fill="#7fd1b4">Ar</text>
+                            <path d="M104 298Q122 298 134 308M134 308l-9-1M134 308l-3-9" fill="none" stroke="#7fd1b4" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+
+                            <!-- legenda: algas felizes -->
+                            <text x="362" y="92" text-anchor="middle" font-size="16" fill="#a2f05e">Algas felizes</text>
+                            <path d="M318 99q4.5-5 9 0t9 0t9 0t9 0t9 0t9 0t9 0t9 0" fill="none" stroke="#a2f05e" stroke-width="2.2" stroke-linecap="round" />
+                            <path d="M322 108Q296 120 280 150M280 150l2-9M280 150l9-5" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+
+                            <!-- Plankton observando -->
+                            <g transform="translate(271 87) scale(.62)">
+                                <g class="p-all" stroke="#14451e" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M124 328 119 388M162 328l5 60" stroke-width="6" fill="none" stroke="#1f6b2a" />
+                                    <ellipse cx="106" cy="392" rx="16" ry="6.5" fill="#1f6b2a" stroke="none" />
+                                    <ellipse cx="179" cy="392" rx="16" ry="6.5" fill="#1f6b2a" stroke="none" />
+                                    <g class="ant ant-l"><path d="M126 186Q108 150 96 120" stroke-width="4.5" fill="none" stroke="#1f6b2a" /><circle cx="94" cy="115" r="7" fill="#4aaa3c" stroke-width="3.5" /></g>
+                                    <g class="ant ant-r"><path d="M160 186Q178 150 192 116" stroke-width="4.5" fill="none" stroke="#1f6b2a" /><circle cx="194" cy="111" r="7" fill="#4aaa3c" stroke-width="3.5" /></g>
+                                    <path d="M143 178C104 178 86 214 84 258C82 304 100 336 143 336C186 336 204 304 202 258C200 214 182 178 143 178z" fill="#4aaa3c" stroke="none" />
+                                    <g clip-path="url(#rfBodyClip)" stroke="none">
+                                        <path d="M176 188C208 222 216 304 166 342L214 342 218 176z" fill="#1f6b2a" opacity=".38" />
+                                        <ellipse cx="108" cy="262" rx="9" ry="34" transform="rotate(-12 108 262)" fill="#a5f070" opacity=".38" />
+                                        <circle cx="104" cy="300" r="5" fill="#1f6b2a" />
+                                        <circle cx="186" cy="290" r="6" fill="#1f6b2a" />
+                                    </g>
+                                    <path d="M143 178C104 178 86 214 84 258C82 304 100 336 143 336C186 336 204 304 202 258C200 214 182 178 143 178z" fill="none" stroke-width="5.5" />
+                                    <ellipse cx="143" cy="222" rx="45" ry="47" fill="#fff" stroke="none" />
+                                    <g clip-path="url(#rfEyeClip)">
+                                        <g class="rf-look">
+                                            <circle cx="150" cy="240" r="24" fill="#5ab04a" stroke-width="3" />
+                                            <circle cx="152" cy="240" r="12" fill="#000" stroke="none" />
+                                            <circle cx="158" cy="233" r="4.5" fill="#fff" stroke="none" />
+                                        </g>
+                                        <polygon points="90,170 200,170 200,212 90,206" fill="#1f6b2a" stroke="none" />
+                                        <path d="M90 206 200 212" stroke-width="4" fill="none" />
+                                        <rect class="blink" x="90" y="170" width="110" height="104" fill="#2f7a1f" stroke="none" />
+                                    </g>
+                                    <ellipse cx="143" cy="222" rx="45" ry="47" fill="none" stroke-width="5" />
+                                    <path d="M116 292Q146 320 174 290" stroke-width="5" fill="none" />
+                                    <path d="M92 282Q54 296 98 318" stroke-width="6" fill="none" stroke="#1f6b2a" />
+                                    <circle cx="100" cy="318" r="8.5" fill="#4aaa3c" stroke-width="3.5" />
+                                    <g class="p-arm"><path d="M196 282Q228 272 236 238" stroke-width="6" fill="none" stroke="#1f6b2a" /><circle cx="237" cy="231" r="8.5" fill="#4aaa3c" stroke-width="3.5" /></g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMO FUNCIONA -->
+        <section class="section alt" id="como">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">02 · Passo a passo</span>
+                    <h2>Como a proposta <span class="accent">funciona</span></h2>
+                </div>
+                <div class="trilha">
+                    <svg class="trilha-linha" viewBox="0 0 1000 150" preserveAspectRatio="none" aria-hidden="true">
+                        <path class="trilha-fluxo" d="M125 46C250 46 250 108 375 108S500 46 625 46S750 108 875 108" />
+                    </svg>
+
+                    <article class="etapa reveal">
+                        <div class="etapa-ico">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <g class="ic-gota"><path d="M24 7C24 7 11 22 11 31a13 13 0 0 0 26 0C37 22 24 7 24 7z" /><circle cx="20" cy="31" r="2.4" /><circle cx="28" cy="27" r="1.8" /><circle cx="27" cy="35" r="2" /></g>
+                            </svg>
+                            <span class="etapa-n">1</span>
+                        </div>
+                        <h3>Inóculo</h3>
+                        <p>Uma pequena amostra de algas é colocada no meio de cultivo, com nutrientes.</p>
+                    </article>
+
+                    <article class="etapa reveal" style="--d:.1s">
+                        <div class="etapa-ico">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M8 14h32M8 24h32M8 34h32" opacity=".45" />
+                                <circle class="ic-knob k1" cx="16" cy="14" r="4" fill="#0e282d" />
+                                <circle class="ic-knob k2" cx="30" cy="24" r="4" fill="#0e282d" />
+                                <circle class="ic-knob k3" cx="22" cy="34" r="4" fill="#0e282d" />
+                            </svg>
+                            <span class="etapa-n">2</span>
+                        </div>
+                        <h3>Condições</h3>
+                        <p>Luz, temperatura e pH são mantidos dentro de uma faixa adequada.</p>
+                    </article>
+
+                    <article class="etapa reveal" style="--d:.2s">
+                        <div class="etapa-ico">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <g class="ic-broto"><path d="M24 40V22" /><path d="M24 26C24 17 16 14 9 15c0 8 6 12 15 11z" /><path d="M24 22c0-8 7-12 15-11 0 8-6 12-15 11z" /></g>
+                                <path d="M12 41h24" opacity=".45" />
+                            </svg>
+                            <span class="etapa-n">3</span>
+                        </div>
+                        <h3>Crescimento</h3>
+                        <p>Pela fotossíntese, as algas absorvem CO₂, liberam O₂ e multiplicam a biomassa.</p>
+                    </article>
+
+                    <article class="etapa reveal" style="--d:.3s">
+                        <div class="etapa-ico">
+                            <svg viewBox="0 0 48 48" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <g class="ic-lupa"><circle cx="21" cy="21" r="11" /><path d="M29.5 29.5 40 40" /><path d="M14 24l5-5 4 3 5-6" /></g>
+                            </svg>
+                            <span class="etapa-n">4</span>
+                        </div>
+                        <h3>Observação</h3>
+                        <p>Os dados são acompanhados para entender o que ajuda ou atrapalha o cultivo.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIMULADOR -->
+        <section id="simulador" class="section">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">03 · Simulador</span>
+                    <h2>Ajude o Plankton a <span class="accent">cultivar</span></h2>
+                    <p class="subtitulo">Escolha um cenário ou mexa nos controles, aperte play e veja as algas crescerem. Dá pra desbloquear 6 conquistas!</p>
+                </div>
+                <div class="simulador">
+                    <div class="sim-controles reveal">
+                        <div>
+                            <p class="mini">Cenários rápidos</p>
+                            <div class="chips">
+                                <button type="button" class="chip" data-p="75,26,8">Oceano ideal</button>
+                                <button type="button" class="chip" data-p="100,38,9.5">Deserto</button>
+                                <button type="button" class="chip" data-p="50,11,8">Geladeira</button>
+                                <button type="button" class="chip" data-p="60,25,5.5">Limonada</button>
+                                <button type="button" class="chip" data-p="0,25,8">Breu total</button>
+                                <button type="button" class="chip chip-rand" data-p="rand">Surpresa</button>
+                            </div>
+                        </div>
+                        <div class="ctrl">
+                            <label for="luz"><span>Iluminação</span> <output id="luzOut">60%</output></label>
+                            <input type="range" id="luz" min="0" max="100" value="60">
+                        </div>
+                        <div class="ctrl">
+                            <label for="temp"><span>Temperatura</span> <output id="tempOut">25 °C</output></label>
+                            <input type="range" id="temp" min="10" max="40" value="25">
+                        </div>
+                        <div class="ctrl">
+                            <label for="ph"><span>pH</span> <output id="phOut">8,0</output></label>
+                            <input type="range" id="ph" min="5" max="11" step="0.1" value="8">
+                        </div>
+                        <div class="missao"><span class="fita" aria-hidden="true"></span><strong>Missão</strong><p>Chegue a <b>95%</b> e faça o Plankton gargalhar!</p></div>
+                        <div>
+                            <p class="mini">Conquistas <span id="achCount">0/6</span></p>
+                            <div class="ach" id="ach">
+                                <span class="badge" data-k="perfeito" title="Cultivo perfeito: chegue a 95%">95%</span>
+                                <span class="badge" data-k="gelo" title="Congelou! Temperatura até 12 °C">≤12°</span>
+                                <span class="badge" data-k="fogo" title="Fervendo! Temperatura a partir de 38 °C">≥38°</span>
+                                <span class="badge" data-k="breu" title="Breu: luz em 0%">0%</span>
+                                <span class="badge" data-k="acido" title="Limonada: pH até 5,5">pH 5</span>
+                                <span class="badge" data-k="sabao" title="Sabão: pH a partir de 10,5">pH 10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sim-resultado reveal" style="--d:.12s" id="simCard">
+                        <div class="sim-fala">
+                            <svg class="face" id="face" viewBox="0 0 100 100" aria-hidden="true">
+                                <defs><clipPath id="faceClip"><ellipse cx="50" cy="52" rx="26" ry="26" /></clipPath></defs>
+                                <g stroke="#14451e" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M42 28 33 8M60 28l9-20" stroke-width="3.5" fill="none" stroke="#1f6b2a" />
+                                    <circle cx="32" cy="6" r="4.5" fill="#4aaa3c" stroke-width="3" />
+                                    <circle cx="70" cy="5" r="4.5" fill="#4aaa3c" stroke-width="3" />
+                                    <path id="faceBody" d="M50 22C30 22 19 42 18 62C17 84 30 97 50 97C70 97 83 84 82 62C81 42 70 22 50 22z" fill="#4aaa3c" stroke-width="4" />
+                                    <ellipse cx="50" cy="52" rx="26" ry="26" fill="#fff" stroke="none" />
+                                    <circle cx="54" cy="59" r="13" fill="#5ab04a" stroke-width="2.5" />
+                                    <circle id="facePupil" cx="55" cy="59" r="6" fill="#000" stroke="none" />
+                                    <circle cx="59" cy="54" r="2.3" fill="#fff" stroke="none" />
+                                    <g clip-path="url(#faceClip)">
+                                        <polygon id="faceHood" points="18,16 82,16 82,46 18,40" fill="#1f6b2a" stroke="none" />
+                                        <path id="faceBrow" d="M18 40 82 46" stroke-width="3.5" fill="none" />
+                                    </g>
+                                    <ellipse cx="50" cy="52" rx="26" ry="26" fill="none" stroke-width="3.5" />
+                                    <path id="faceMouth" d="M34 80Q50 94 66 80Q50 86 34 80z" stroke-width="3.5" fill="#14451e" />
+                                </g>
+                            </svg>
+                            <div class="balao"><p id="plkMsg">Vamos salvar o plano!</p><small id="plkHint">Mexa nos controles.</small></div>
+                        </div>
+                        <div class="sim-topo">
+                            <div class="medidor"><strong id="simScore">0%</strong>
+                                <div><span>eficiência do cultivo</span><div class="stars" id="stars" aria-label="Estrelas"><i>★</i><i>★</i><i>★</i></div></div>
+                            </div>
+                            <span class="tag otimo" id="simTag">Ótimo</span>
+                        </div>
+                        <div class="sim-palco">
+                            <canvas id="tanque" role="img" aria-label="Tanque do reator com algas, bolhas e termômetro"></canvas>
+                            <div class="sim-grafico">
+                                <span class="fita" aria-hidden="true"></span>
+                                <h4>Caderno do Plankton</h4>
+                                <canvas id="grafico-sim" role="img" aria-label="Curva de crescimento da biomassa em 14 dias"></canvas>
+                                <div class="sim-play">
+                                    <button type="button" class="botao botao-sm" id="playBtn">Rodar 14 dias</button>
+                                    <span id="dayTag">Dia 14</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="sim-legenda">Modelo didático simplificado (curva logística), não são medições reais.</p>
+                        <canvas id="confete" aria-hidden="true"></canvas>
+                        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRÁFICOS -->
+        <section id="graficos" class="section alt">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">04 · Gráficos</span>
+                    <h2>Gráficos do <span class="accent">projeto</span></h2>
+                    <p class="subtitulo">Acompanhamento do crescimento das algas e da temperatura do reator.</p>
+                </div>
+                <div class="graf">
+                    <div class="graf-bloco reveal">
+                        <span class="selo selo-com">Com BioPulse</span>
+                        <h3>Crescimento das algas</h3>
+                        <svg class="risco" viewBox="0 0 80 8" aria-hidden="true"><path d="M2 5q6-5 12 0t12 0t12 0t12 0t12 0t12 0" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" /></svg>
+                        <p class="graf-nota">Evolução do crescimento das algas nos quatro primeiros dias de cultivo.</p>
+                        <div class="jarros">
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj0"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj0)">
+                                        <g class="jarro-liq" style="--h:0.28;--d:0.00s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#4fae3d" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#8fd458" opacity=".8" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.20s"><g transform="translate(29.0 96.5)"><g class="rf-cell" style="--t:5.3s;--dx:-3.9px;--dy:3.9px;--d:-2.9s"><circle r="4.6" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.5Q0 3.5 1.6 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(48.9 97.0)"><g class="rf-cell" style="--t:5.3s;--dx:2.5px;--dy:-2.5px;--d:-2.1s"><circle r="3.7" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.2" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.2" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.3 1.2Q0 2.8 1.3 1.2" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(46.1 96.2)"><g class="rf-cell" style="--t:6.2s;--dx:-3.4px;--dy:3.4px;--d:-4.9s"><circle r="4.0" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.3" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:0.0s" cx="24" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:1.4s" cx="44" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#2f7a4a" stroke="#14451e" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>28%</b><span>Dia 1</span></figcaption>
+                            </figure>
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj1"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj1)">
+                                        <g class="jarro-liq" style="--h:0.5;--d:0.15s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#4fae3d" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#8fd458" opacity=".8" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.35s"><g transform="translate(19.6 99.8)"><g class="rf-cell" style="--t:6.7s;--dx:-3.4px;--dy:3.4px;--d:-2.8s"><circle r="4.1" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.3" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(41.2 77.1)"><g class="rf-cell" style="--t:6.6s;--dx:-3.1px;--dy:3.1px;--d:-0.3s"><circle r="4.5" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.4Q0 3.4 1.6 1.4" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(20.0 80.2)"><g class="rf-cell" style="--t:6.4s;--dx:3.8px;--dy:-3.8px;--d:-4.6s"><circle r="4.7" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.5Q0 3.5 1.6 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(30.3 81.5)"><g class="rf-cell" style="--t:5.9s;--dx:-2.5px;--dy:2.5px;--d:-2.5s"><circle r="3.9" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.3" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.4 1.2Q0 2.9 1.4 1.2" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:0.7s" cx="30" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:2.1s" cx="41" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#2f7a4a" stroke="#14451e" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>50%</b><span>Dia 2</span></figcaption>
+                            </figure>
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj2"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj2)">
+                                        <g class="jarro-liq" style="--h:0.75;--d:0.30s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#4fae3d" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#8fd458" opacity=".8" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.50s"><g transform="translate(29.7 74.2)"><g class="rf-cell" style="--t:6.3s;--dx:-2.6px;--dy:2.6px;--d:-3.8s"><circle r="4.6" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.5Q0 3.4 1.6 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(23.2 76.4)"><g class="rf-cell" style="--t:6.7s;--dx:-3.8px;--dy:3.8px;--d:-4.4s"><circle r="3.7" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.2" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.2" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.3 1.2Q0 2.7 1.3 1.2" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(28.7 87.5)"><g class="rf-cell" style="--t:5.3s;--dx:2.5px;--dy:-2.5px;--d:-1.3s"><circle r="4.6" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.5Q0 3.4 1.6 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(41.7 53.5)"><g class="rf-cell" style="--t:8.0s;--dx:3.6px;--dy:-3.6px;--d:-4.1s"><circle r="4.8" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.6" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.6" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.7 1.5Q0 3.6 1.7 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(27.7 70.8)"><g class="rf-cell" style="--t:6.1s;--dx:-4.1px;--dy:4.1px;--d:-3.1s"><circle r="4.7" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.5Q0 3.5 1.6 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:1.4s" cx="36" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:2.8s" cx="38" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#2f7a4a" stroke="#14451e" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>75%</b><span>Dia 3</span></figcaption>
+                            </figure>
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj3"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj3)">
+                                        <g class="jarro-liq" style="--h:0.96;--d:0.45s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#4fae3d" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#8fd458" opacity=".8" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.65s"><g transform="translate(34.8 46.0)"><g class="rf-cell" style="--t:7.8s;--dx:-3.1px;--dy:3.1px;--d:-2.5s"><circle r="4.1" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.3" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(23.7 59.6)"><g class="rf-cell" style="--t:7.6s;--dx:-3.9px;--dy:3.9px;--d:-1.4s"><circle r="4.0" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.3" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(32.1 56.4)"><g class="rf-cell" style="--t:5.5s;--dx:-2.7px;--dy:2.7px;--d:-1.2s"><circle r="5.0" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.7" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.7" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.8 1.6Q0 3.8 1.8 1.6" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(25.9 65.8)"><g class="rf-cell" style="--t:5.4s;--dx:2.9px;--dy:-2.9px;--d:-2.7s"><circle r="4.5" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#0b2a14" /><circle cx="1.5" cy="-0.5" r=".9" fill="#0b2a14" /><path d="M-1.6 1.5Q0 3.4 1.6 1.5" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(38.7 53.5)"><g class="rf-cell" style="--t:7.6s;--dx:-3.2px;--dy:3.2px;--d:-4.8s"><circle r="3.8" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.3" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.3 1.2Q0 2.9 1.3 1.2" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g><g transform="translate(41.1 71.3)"><g class="rf-cell" style="--t:6.9s;--dx:2.6px;--dy:-2.6px;--d:-0.3s"><circle r="4.2" fill="#3f9e36" stroke="#14451e" stroke-width="1.3" /><circle cx="-1.4" cy="-0.4" r=".9" fill="#0b2a14" /><circle cx="1.4" cy="-0.4" r=".9" fill="#0b2a14" /><path d="M-1.5 1.4Q0 3.2 1.5 1.4" fill="none" stroke="#0b2a14" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:2.1s" cx="42" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:3.5s" cx="35" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#2f7a4a" stroke="#14451e" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>96%</b><span>Dia 4</span></figcaption>
+                            </figure>
+                            </div>
+                    </div>
+                    <div class="graf-bloco reveal" style="--d:.15s">
+                        <span class="selo selo-sem">Sem BioPulse</span>
+                        <h3>Estabilidade térmica</h3>
+                        <svg class="risco" viewBox="0 0 80 8" aria-hidden="true"><path d="M2 5q6-5 12 0t12 0t12 0t12 0t12 0t12 0" fill="none" stroke="#ff6b6b" stroke-width="2.4" stroke-linecap="round" /></svg>
+                        <p class="graf-nota">Estabilidade da temperatura do reator nos quatro primeiros dias.</p>
+                        <div class="jarros jarros-sem">
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj4"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj4)">
+                                        <g class="jarro-liq" style="--h:0.92;--d:0.00s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#d6453b" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#f2837a" opacity=".85" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.20s"><g transform="translate(29.0 44.3)"><g class="rf-cell" style="--t:5.3s;--dx:-3.9px;--dy:3.9px;--d:-2.9s"><circle r="4.6" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.5Q0 3.5 1.6 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(48.9 48.8)"><g class="rf-cell" style="--t:5.3s;--dx:2.5px;--dy:-2.5px;--d:-2.1s"><circle r="3.7" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.2" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.2" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.3 1.2Q0 2.8 1.3 1.2" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(46.1 42.4)"><g class="rf-cell" style="--t:6.2s;--dx:-3.4px;--dy:3.4px;--d:-4.9s"><circle r="4.0" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.3" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(19.6 94.0)"><g class="rf-cell" style="--t:6.7s;--dx:-3.4px;--dy:3.4px;--d:-2.8s"><circle r="4.1" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.3" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(41.2 40.9)"><g class="rf-cell" style="--t:6.6s;--dx:-3.1px;--dy:3.1px;--d:-0.3s"><circle r="4.5" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.4Q0 3.4 1.6 1.4" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(20.0 48.2)"><g class="rf-cell" style="--t:6.4s;--dx:3.8px;--dy:-3.8px;--d:-4.6s"><circle r="4.7" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.5Q0 3.5 1.6 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:0.0s" cx="24" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:1.4s" cx="44" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#a83a31" stroke="#5a1410" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>92%</b><span>Dia 1</span></figcaption>
+                            </figure>
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj5"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj5)">
+                                        <g class="jarro-liq" style="--h:0.7;--d:0.15s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#d6453b" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#f2837a" opacity=".85" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.35s"><g transform="translate(30.3 67.0)"><g class="rf-cell" style="--t:5.9s;--dx:-2.5px;--dy:2.5px;--d:-2.5s"><circle r="3.9" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.3" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.4 1.2Q0 2.9 1.4 1.2" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(29.7 76.9)"><g class="rf-cell" style="--t:6.3s;--dx:-2.6px;--dy:2.6px;--d:-3.8s"><circle r="4.6" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.5Q0 3.4 1.6 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(23.2 78.9)"><g class="rf-cell" style="--t:6.7s;--dx:-3.8px;--dy:3.8px;--d:-4.4s"><circle r="3.7" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.2" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.2" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.3 1.2Q0 2.7 1.3 1.2" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(28.7 89.0)"><g class="rf-cell" style="--t:5.3s;--dx:2.5px;--dy:-2.5px;--d:-1.3s"><circle r="4.6" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.5Q0 3.4 1.6 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(41.7 58.0)"><g class="rf-cell" style="--t:8.0s;--dx:3.6px;--dy:-3.6px;--d:-4.1s"><circle r="4.8" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.6" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.6" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.7 1.5Q0 3.6 1.7 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:0.7s" cx="30" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:2.1s" cx="41" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#a83a31" stroke="#5a1410" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>70%</b><span>Dia 2</span></figcaption>
+                            </figure>
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj6"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj6)">
+                                        <g class="jarro-liq" style="--h:0.46;--d:0.30s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#d6453b" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#f2837a" opacity=".85" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.50s"><g transform="translate(27.7 87.9)"><g class="rf-cell" style="--t:6.1s;--dx:-4.1px;--dy:4.1px;--d:-3.1s"><circle r="4.7" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.5Q0 3.5 1.6 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(34.8 83.5)"><g class="rf-cell" style="--t:7.8s;--dx:-3.1px;--dy:3.1px;--d:-2.5s"><circle r="4.1" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.3" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(23.7 88.3)"><g class="rf-cell" style="--t:7.6s;--dx:-3.9px;--dy:3.9px;--d:-1.4s"><circle r="4.0" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.3" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.4 1.3Q0 3.0 1.4 1.3" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(32.1 87.2)"><g class="rf-cell" style="--t:5.5s;--dx:-2.7px;--dy:2.7px;--d:-1.2s"><circle r="5.0" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.7" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.7" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.8 1.6Q0 3.8 1.8 1.6" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:1.4s" cx="36" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:2.8s" cx="38" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#a83a31" stroke="#5a1410" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>46%</b><span>Dia 3</span></figcaption>
+                            </figure>
+                            <figure class="jarro">
+                                <svg viewBox="0 0 70 120" aria-hidden="true">
+                                    <defs><clipPath id="gj7"><rect x="6" y="16" width="58" height="96" rx="16" /></clipPath></defs>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="#0a2227" />
+                                    <g clip-path="url(#gj7)">
+                                        <g class="jarro-liq" style="--h:0.25;--d:0.45s">
+                                            <rect x="6" y="16" width="58" height="96" fill="#d6453b" />
+                                            <path d="M6 16q7-5 14 0t14 0t14 0t14 0t14 0v6H6z" fill="#f2837a" opacity=".85" />
+                                        </g>
+                                        <g class="jarro-cells" style="--d:1.65s"><g transform="translate(25.9 100.9)"><g class="rf-cell" style="--t:5.4s;--dx:2.9px;--dy:-2.9px;--d:-2.7s"><circle r="4.5" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.5" cy="-0.5" r=".9" fill="#3a0c09" /><circle cx="1.5" cy="-0.5" r=".9" fill="#3a0c09" /><path d="M-1.6 1.5Q0 3.4 1.6 1.5" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(38.7 99.9)"><g class="rf-cell" style="--t:7.6s;--dx:-3.2px;--dy:3.2px;--d:-4.8s"><circle r="3.8" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.3" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.3" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.3 1.2Q0 2.9 1.3 1.2" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g><g transform="translate(41.1 101.4)"><g class="rf-cell" style="--t:6.9s;--dx:2.6px;--dy:-2.6px;--d:-0.3s"><circle r="4.2" fill="#b8322b" stroke="#5a1410" stroke-width="1.3" /><circle cx="-1.4" cy="-0.4" r=".9" fill="#3a0c09" /><circle cx="1.4" cy="-0.4" r=".9" fill="#3a0c09" /><path d="M-1.5 1.4Q0 3.2 1.5 1.4" fill="none" stroke="#3a0c09" stroke-width="1" /></g></g></g>
+                                        <circle class="jarro-bub" style="--d:2.1s" cx="42" cy="108" r="2" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                        <circle class="jarro-bub" style="--d:3.5s" cx="35" cy="108" r="1.6" fill="none" stroke="#e9f8f4" stroke-width="1.2" />
+                                    </g>
+                                    <rect x="6" y="16" width="58" height="96" rx="16" fill="none" stroke="#7fd1b4" stroke-width="3" />
+                                    <rect x="11" y="26" width="4" height="40" rx="2" fill="#fff" opacity=".13" />
+                                    <rect x="14" y="5" width="42" height="13" rx="5" fill="#a83a31" stroke="#5a1410" stroke-width="2" />
+                                </svg>
+                                <figcaption><b>25%</b><span>Dia 4</span></figcaption>
+                            </figure>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODELO 3D -->
+        <section id="modelo" class="section">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">05 · Modelo 3D</span>
+                    <h2>Modelo <span class="accent">3D</span></h2>
+                    <p class="subtitulo">O Plankton, mascote do projeto, em 3D. Arraste para girar e veja o olho dele seguir o seu mouse.</p>
+                </div>
+                <div class="modelo">
+                    <div class="card viewer reveal" aria-label="Visualizador 3D do Plankton">
+                        <span class="viewer-badge">3D interativo</span>
+                        <div id="plk3d"></div>
+                        <div class="no3d-msg"><p>Seu navegador não conseguiu iniciar o visualizador 3D (WebGL indisponível ou sem conexão com a biblioteca).</p></div>
+                        <div class="viewer-bar"><span>Arraste para girar</span><button type="button" id="plkReset">Resetar vista</button></div>
+                    </div>
+                    <div class="sensores">
+                        <div class="card sensor reveal" style="--d:.05s"><div class="ico">pH</div><div><strong>pH</strong><span>Acompanhamento da acidez do cultivo.</span></div></div>
+                        <div class="card sensor reveal" style="--d:.1s"><div class="ico">°C</div><div><strong>Temperatura</strong><span>Acompanhamento térmico do reator.</span></div></div>
+                        <div class="card sensor reveal" style="--d:.15s"><div class="ico">lux</div><div><strong>Iluminação</strong><span>Luz disponível para a fotossíntese.</span></div></div>
+                        <div class="card sensor reveal" style="--d:.2s"><div class="ico">bio</div><div><strong>Biomassa</strong><span>Crescimento das algas ao longo do tempo.</span></div></div>
+                        <a class="botao botao-ghost reveal"
+                            href="https://www.tinkercad.com/things/8X7OVJnuPBC-earth-link/edit?returnTo=%2Fthings%2F8X7OVJnuPBC-earth-link&sharecode=8dwm6I2OkcQvpH1liBf6PUUvizp5k4HqW32IdZRSRoo"
+                            target="_blank" rel="noopener noreferrer">Abrir o reator no Tinkercad ↗</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RELATÓRIO -->
+        <section id="relatorio" class="section alt">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">06 · Relatório</span>
+                    <h2>Relatório do <span class="accent">projeto</span></h2>
+                    <p class="subtitulo">Uma visão geral da proposta Earth Link.</p>
+                </div>
+                <div class="rel">
+                    <div class="rel-itens">
+                        <article class="rel-item reveal">
+                            <div class="etapa-ico">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="22" cy="26" r="15" /><circle cx="22" cy="26" r="9" /><circle cx="22" cy="26" r="2.6" fill="#a2f05e" />
+                                    <g class="ic-dardo"><path d="M23 25 40 8" /><path d="M40 8v7M40 8h-7" /></g>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3>Objetivo</h3>
+                                <p>Apresentar um reator de algas como proposta educativa, ligada à biotecnologia e à sustentabilidade.</p>
+                            </div>
+                        </article>
+                        <article class="rel-item reveal" style="--d:.12s">
+                            <div class="etapa-ico">
+                                <svg viewBox="0 0 48 48" fill="none" stroke="#a2f05e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <g class="ic-engrenagem"><circle cx="24" cy="24" r="8" /><circle cx="24" cy="24" r="3" /><path d="M37.0 24.0L42.0 24.0" /><path d="M33.2 33.2L36.7 36.7" /><path d="M24.0 37.0L24.0 42.0" /><path d="M14.8 33.2L11.3 36.7" /><path d="M11.0 24.0L6.0 24.0" /><path d="M14.8 14.8L11.3 11.3" /><path d="M24.0 11.0L24.0 6.0" /><path d="M33.2 14.8L36.7 11.3" /></g>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3>Como funciona a proposta</h3>
+                                <p>O cultivo pode ser estudado observando fatores como luz, temperatura, pH e o crescimento das algas.</p>
+                            </div>
+                        </article>
+                    </div>
+                    <aside class="nota reveal" style="--d:.2s">
+                        <span class="fita" aria-hidden="true"></span>
+                        <strong>Em resumo</strong>
+                        <svg class="nota-risco" viewBox="0 0 80 8" aria-hidden="true"><path d="M2 5q6-5 12 0t12 0t12 0t12 0t12 0t12 0" fill="none" stroke="#b07d00" stroke-width="2.4" stroke-linecap="round" /></svg>
+                        <p>O Earth Link é um reator de algas que acompanha a luz, a temperatura, o pH e a biomassa do cultivo. O modelo 3D do reator foi feito no Tinkercad.</p>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">07 · Dúvidas</span>
+                    <h2>Perguntas <span class="accent">frequentes</span></h2>
+                </div>
+                <div class="faq">
+                    <details class="card reveal"><summary>O que é um reator de algas?</summary>
+                        <p>É um recipiente que mantém luz, temperatura, nutrientes e pH em condições adequadas para cultivar algas de forma controlada.</p></details>
+                    <details class="card reveal"><summary>Por que algas são importantes?</summary>
+                        <p>Algas e fitoplâncton fazem fotossíntese, produzem oxigênio, absorvem CO₂ e são a base da cadeia alimentar marinha.</p></details>
+                    <details class="card reveal"><summary>Os dados do site são reais?</summary>
+                        <p>Sim, os gráficos mostram o acompanhamento do cultivo. A exceção é o simulador interativo: ele é um modelo didático, e a curva é calculada por uma fórmula simples para você explorar como luz, temperatura e pH influenciam o crescimento.</p></details>
+                    <details class="card reveal"><summary>Como encomendar um reator?</summary>
+                        <p>Preencha o formulário de contato abaixo. Seu aplicativo de e-mail abrirá com a mensagem pronta para enviar.</p></details>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTATO -->
+        <section id="contato" class="section alt">
+            <div class="container">
+                <div class="section-head reveal">
+                    <span class="etiqueta">08 · Contato</span>
+                    <h2>Encomende seu <span class="accent">reator de algas</span></h2>
+                    <p class="subtitulo">Conte como você imagina o reator e quais seriam suas necessidades.</p>
+                </div>
+                <div class="contato-conteudo">
+                    <div class="card contato-info reveal">
+                        <h3>Vamos conversar sobre sua ideia?</h3>
+                        <p>Preencha o formulário para preparar uma mensagem sobre a encomenda.</p>
+                        <p><strong>E-mail para contato:</strong></p>
+                        <a class="email-contato" href="mailto:rm13469@fiap.com.br">rm13469@fiap.com.br</a>
+                        <p>Ao enviar, seu aplicativo de e-mail será aberto com as respostas preenchidas.</p>
+                    </div>
+                    <form class="card form-contato reveal" id="formContato" style="--d:.1s">
+                        <div class="linha">
+                            <div><label for="nome">Seu nome</label><input type="text" id="nome" name="nome" required autocomplete="name"></div>
+                            <div><label for="email">Seu e-mail</label><input type="email" id="email" name="email" required autocomplete="email"></div>
+                        </div>
+                        <div class="linha tres">
+                            <div><label for="aparencia">Aparência</label>
+                                <select id="aparencia" required>
+                                    <option value="">Escolha</option>
+                                    <option>Pequeno e compacto</option>
+                                    <option>Maior, para uma produção ampliada</option>
+                                    <option>Com formato ou cores personalizados</option>
+                                    <option>Ainda não tenho certeza</option>
+                                </select></div>
+                            <div><label for="uso">Uso do reator</label>
+                                <select id="uso" required>
+                                    <option value="">Escolha</option>
+                                    <option>Projeto escolar ou educativo</option>
+                                    <option>Pesquisa</option>
+                                    <option>Cultivo de algas</option>
+                                    <option>Outro uso</option>
+                                </select></div>
+                            <div><label for="tamanho">Tamanho</label>
+                                <select id="tamanho" required>
+                                    <option value="">Escolha</option>
+                                    <option>Pequeno</option>
+                                    <option>Médio</option>
+                                    <option>Grande</option>
+                                    <option>Preciso de ajuda para escolher</option>
+                                </select></div>
+                        </div>
+                        <label for="mensagem">Dúvidas ou detalhes da encomenda</label>
+                        <textarea id="mensagem" rows="4" placeholder="Escreva aqui outras informações que queira passar."></textarea>
+                        <button class="botao" type="submit">Preparar mensagem</button>
+                        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a class="logo" href="#inicio">EARTH LINK</a>
+                    <p>Projeto educativo sobre reatores de algas, unindo biotecnologia e sustentabilidade.</p>
+                </div>
+                <div>
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="#reator">O reator</a></li>
+                        <li><a href="#simulador">Simulador</a></li>
+                        <li><a href="#modelo">Modelo 3D</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><a href="mailto:rm13469@fiap.com.br">rm13469@fiap.com.br</a></li>
+                        <li><a href="#contato">Fazer encomenda</a></li>
+                    </ul>
+                </div>
+            </div>
+            <small>© Earth Link · Projeto educativo. Plankton é personagem de Bob Esponja (Nickelodeon), usado aqui como homenagem em projeto escolar.</small>
+            <small class="versao">Versão do site: 14/10 às 12:33</small>
+        </div>
+    </footer>
+
+    <button type="button" class="anim-btn" id="animBtn" aria-pressed="false">Pausar animações</button>
+    <a href="#inicio" class="topo" id="topo" aria-label="Voltar ao topo">↑</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js?v=1791992006"></script>
+</body>
+
+</html>
