@@ -1,0 +1,162 @@
+/* ---------- Chatbot do Plankton ---------- */
+/* o botão do chat ocupa o canto; "voltar ao topo" sobe para ficar acima dele */
+.topo {
+    bottom: 96px;
+}
+
+.chat-abrir {
+    position: fixed;
+    right: 20px;
+    bottom: 32px;
+    z-index: 45;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    color: var(--btn-fg);
+    background: var(--btn-bg);
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.chat-abrir:hover {
+    background: var(--btn-hover);
+    transform: scale(1.06);
+}
+
+.chat-abrir svg {
+    width: 24px;
+    height: 24px;
+}
+
+.chat-painel {
+    position: fixed;
+    right: 20px;
+    bottom: 96px;
+    z-index: 45;
+    width: min(360px, calc(100vw - 32px));
+    height: min(480px, calc(100svh - 182px));
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    color: var(--fg);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+}
+
+.chat-painel[hidden] {
+    display: none;
+}
+
+.chat-topo {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--serif);
+}
+
+.chat-topo span {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    color: var(--fg-2);
+}
+
+.chat-fechar {
+    margin-left: auto;
+    padding: 0 6px;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--fg-2);
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.chat-fechar:hover {
+    color: var(--fg);
+}
+
+.chat-msgs {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    overflow-y: auto;
+}
+
+.chat-msg {
+    max-width: 85%;
+    padding: 9px 12px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    border-radius: 12px;
+}
+
+.chat-msg.bot {
+    align-self: flex-start;
+    background: var(--page-2);
+    border: 1px solid var(--line);
+    border-bottom-left-radius: 4px;
+}
+
+.chat-msg.eu {
+    align-self: flex-end;
+    color: var(--btn-fg);
+    background: var(--btn-bg);
+    border-bottom-right-radius: 4px;
+}
+
+.chat-msg.pensando {
+    color: var(--fg-2);
+    font-style: italic;
+}
+
+.chat-form {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid var(--line);
+}
+
+.chat-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--fg);
+    background: var(--page);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.chat-form input:focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 1px;
+}
+
+.chat-form button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+@media (max-width: 480px) {
+    .chat-abrir {
+        right: 16px;
+    }
+
+    .chat-painel {
+        right: 16px;
+    }
+}
