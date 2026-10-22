@@ -38,9 +38,8 @@
                 <a href="#reator">O reator</a>
                 <a href="#simulador">Simulador</a>
                 <a href="#graficos">Gráficos</a>
-                <a href="#modelo">Modelo 3D</a>
+                <a href="#modelo">Ver Plankton</a>
                 <a href="#relatorio">Relatório</a>
-                <a href="#faq">FAQ</a>
                 <a href="#contato" class="nav-cta">Encomendar</a>
             </nav>
         </div>
@@ -59,7 +58,7 @@
                     </p>
                     <div class="hero-acoes reveal" style="--d:.24s">
                         <a href="#reator" class="botao">Conheça o projeto</a>
-                        <a href="#modelo" class="botao botao-ghost">Ver o Plankton em 3D</a>
+                        <a href="#modelo" class="botao botao-ghost">Ver o Plankton</a>
                     </div>
                 </div>
                 <div class="hero-visual reveal" style="--d:.15s">
@@ -679,22 +678,32 @@
         <section id="modelo" class="section">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="etiqueta">05 · Modelo 3D</span>
-                    <h2>Modelo <span class="accent">3D</span></h2>
-                    <p class="subtitulo">O Plankton, mascote do projeto, em 3D. Arraste para girar e veja o olho dele seguir o seu mouse.</p>
+                    <span class="etiqueta">05 · Reator</span>
+                    <h2>Reator <span class="accent">montado</span></h2>
+                    <p class="subtitulo">O reator Earth Link de verdade, com o Plankton, mascote do projeto. Clique nos sensores para ver onde cada um atua.</p>
                 </div>
                 <div class="modelo">
-                    <div class="card viewer reveal" aria-label="Visualizador 3D do Plankton">
-                        <span class="viewer-badge">3D interativo</span>
-                        <div id="plk3d"></div>
-                        <div class="no3d-msg"><p>Seu navegador não conseguiu iniciar o visualizador 3D (WebGL indisponível ou sem conexão com a biblioteca).</p></div>
-                        <div class="viewer-bar"><span>Arraste para girar</span><button type="button" id="plkReset">Resetar vista</button></div>
-                    </div>
+                    <figure class="card viewer reveal">
+                        <span class="viewer-badge">Reator montado</span>
+                        <span class="bolhas" aria-hidden="true"><i style="--x:12%;--s:10px;--t:7s;--d:0s;--w:14px"></i><i style="--x:22%;--s:6px;--t:9s;--d:3s;--w:-10px"></i><i style="--x:34%;--s:14px;--t:8s;--d:5s;--w:18px"></i><i style="--x:68%;--s:8px;--t:7.5s;--d:1.5s;--w:-14px"></i><i style="--x:78%;--s:12px;--t:9.5s;--d:4s;--w:12px"></i><i style="--x:88%;--s:7px;--t:8s;--d:6.5s;--w:-8px"></i><i style="--x:50%;--s:9px;--t:10s;--d:2.5s;--w:10px"></i></span>
+                        <div class="reator-palco">
+                            <img src="reator.png" width="556" height="741" loading="lazy"
+                                alt="Reator Earth Link: base azul com flores da Fenda do Biquíni, tubo transparente com o Plankton rindo, tampa verde com antenas e o Bob Esponja ao lado">
+                        </div>
+                        <svg class="reator-setas" id="reatorSetas" aria-hidden="true">
+                            <path class="seta-linha" pathLength="1"></path>
+                            <path class="seta-ponta"></path>
+                            <circle class="seta-pulso" r="6"></circle>
+                            <circle class="seta-alvo" r="6"></circle>
+                        </svg>
+                        <div class="seta-rotulo" id="reatorRotulo" aria-hidden="true"><strong></strong><span></span></div>
+                        <figcaption class="viewer-dica" id="reatorDica" aria-live="polite">Clique em um sensor para ver onde ele fica no reator.</figcaption>
+                    </figure>
                     <div class="sensores">
-                        <div class="card sensor reveal" style="--d:.05s"><div class="ico">pH</div><div><strong>pH</strong><span>Acompanhamento da acidez do cultivo.</span></div></div>
-                        <div class="card sensor reveal" style="--d:.1s"><div class="ico">°C</div><div><strong>Temperatura</strong><span>Acompanhamento térmico do reator.</span></div></div>
-                        <div class="card sensor reveal" style="--d:.15s"><div class="ico">lux</div><div><strong>Iluminação</strong><span>Luz disponível para a fotossíntese.</span></div></div>
-                        <div class="card sensor reveal" style="--d:.2s"><div class="ico">bio</div><div><strong>Biomassa</strong><span>Crescimento das algas ao longo do tempo.</span></div></div>
+                        <button type="button" class="card sensor reveal" style="--d:.05s" data-sensor="ph" aria-pressed="false" aria-controls="reatorDica"><span class="ico">pH</span><span class="sensor-txt"><strong>pH</strong><span>Acompanhamento da acidez do cultivo.</span></span></button>
+                        <button type="button" class="card sensor reveal" style="--d:.1s" data-sensor="temperatura" aria-pressed="false" aria-controls="reatorDica"><span class="ico">°C</span><span class="sensor-txt"><strong>Temperatura</strong><span>Acompanhamento térmico do reator.</span></span></button>
+                        <button type="button" class="card sensor reveal" style="--d:.15s" data-sensor="iluminacao" aria-pressed="false" aria-controls="reatorDica"><span class="ico">lux</span><span class="sensor-txt"><strong>Iluminação</strong><span>Luz disponível para a fotossíntese.</span></span></button>
+                        <button type="button" class="card sensor reveal" style="--d:.2s" data-sensor="biomassa" aria-pressed="false" aria-controls="reatorDica"><span class="ico">bio</span><span class="sensor-txt"><strong>Biomassa</strong><span>Crescimento das algas ao longo do tempo.</span></span></button>
                         <a class="botao botao-ghost reveal"
                             href="https://www.tinkercad.com/things/8X7OVJnuPBC-earth-link/edit?returnTo=%2Fthings%2F8X7OVJnuPBC-earth-link&sharecode=8dwm6I2OkcQvpH1liBf6PUUvizp5k4HqW32IdZRSRoo"
                             target="_blank" rel="noopener noreferrer">Abrir o reator no Tinkercad ↗</a>
@@ -741,37 +750,17 @@
                         <span class="fita" aria-hidden="true"></span>
                         <strong>Em resumo</strong>
                         <svg class="nota-risco" viewBox="0 0 80 8" aria-hidden="true"><path d="M2 5q6-5 12 0t12 0t12 0t12 0t12 0t12 0" fill="none" stroke="#b07d00" stroke-width="2.4" stroke-linecap="round" /></svg>
-                        <p>O Earth Link é um reator de algas que acompanha a luz, a temperatura, o pH e a biomassa do cultivo. O modelo 3D do reator foi feito no Tinkercad.</p>
+                        <p>O Earth Link é um reator de algas que acompanha a luz, a temperatura, o pH e a biomassa do cultivo. O reator foi feito no Tinkercad.</p>
                     </aside>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ -->
-        <section id="faq" class="section">
-            <div class="container">
-                <div class="section-head reveal">
-                    <span class="etiqueta">07 · Dúvidas</span>
-                    <h2>Perguntas <span class="accent">frequentes</span></h2>
-                </div>
-                <div class="faq">
-                    <details class="card reveal"><summary>O que é um reator de algas?</summary>
-                        <p>É um recipiente que mantém luz, temperatura, nutrientes e pH em condições adequadas para cultivar algas de forma controlada.</p></details>
-                    <details class="card reveal"><summary>Por que algas são importantes?</summary>
-                        <p>Algas e fitoplâncton fazem fotossíntese, produzem oxigênio, absorvem CO₂ e são a base da cadeia alimentar marinha.</p></details>
-                    <details class="card reveal"><summary>Os dados do site são reais?</summary>
-                        <p>Sim, os gráficos mostram o acompanhamento do cultivo. A exceção é o simulador interativo: ele é um modelo didático, e a curva é calculada por uma fórmula simples para você explorar como luz, temperatura e pH influenciam o crescimento.</p></details>
-                    <details class="card reveal"><summary>Como encomendar um reator?</summary>
-                        <p>Preencha o formulário de contato abaixo. Seu aplicativo de e-mail abrirá com a mensagem pronta para enviar.</p></details>
-                </div>
-            </div>
-        </section>
-
         <!-- CONTATO -->
-        <section id="contato" class="section alt">
+        <section id="contato" class="section">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="etiqueta">08 · Contato</span>
+                    <span class="etiqueta">07 · Contato</span>
                     <h2>Encomende seu <span class="accent">reator de algas</span></h2>
                     <p class="subtitulo">Conte como você imagina o reator e quais seriam suas necessidades.</p>
                 </div>
@@ -836,8 +825,7 @@
                     <ul>
                         <li><a href="#reator">O reator</a></li>
                         <li><a href="#simulador">Simulador</a></li>
-                        <li><a href="#modelo">Modelo 3D</a></li>
-                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#modelo">Ver Plankton</a></li>
                     </ul>
                 </div>
                 <div>
@@ -855,7 +843,6 @@
 
     <button type="button" class="anim-btn" id="animBtn" aria-pressed="false">Pausar animações</button>
     <a href="#inicio" class="topo" id="topo" aria-label="Voltar ao topo">↑</a>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="script.js?v=1791992006"></script>
     <script src="chatbot.js"></script>
 </body>

@@ -1,7 +1,9 @@
 (() => {
     "use strict";
     // Em produção, defina window.EARTHLINK_CHAT_API = "https://seu-servidor/chat" antes deste script.
-    const API = window.EARTHLINK_CHAT_API || "/chat";
+    // Localmente fora do Flask (Live Server, arquivo aberto direto), aponta para o Flask na porta 5000.
+    const local = location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(location.hostname);
+    const API = window.EARTHLINK_CHAT_API || (local && location.port !== "5000" ? "http://127.0.0.1:5000/chat" : "/chat");
     const BOAS_VINDAS = "Oi! Eu sou o Plankton, mascote do Earth Link. Pergunte sobre o reator, as algas ou o simulador!";
 
     const abrir = document.createElement("button");

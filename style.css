@@ -1066,6 +1066,7 @@ input[type="range"]::-moz-range-thumb {
 .viewer {
     position: relative;
     min-height: 480px;
+    margin: 0;
     padding: 0;
     overflow: hidden;
     border: 2px solid var(--ink);
@@ -1075,21 +1076,182 @@ input[type="range"]::-moz-range-thumb {
         var(--sand);
 }
 
-#plk3d {
+.reator-palco {
     position: absolute;
-    inset: 0;
+    top: 48px;
+    bottom: 50px;
+    left: 50%;
+    z-index: 1;
+    max-width: calc(100% - 32px);
+    aspect-ratio: 556 / 741;
+    translate: -50% 0;
+    animation: reator-flutua 6s ease-in-out infinite;
 }
 
-#plk3d canvas {
+.reator-palco img {
     display: block;
     width: 100%;
     height: 100%;
-    cursor: grab;
-    touch-action: pan-y;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 26px rgba(162, 240, 94, 0.2));
 }
 
-#plk3d canvas:active {
-    cursor: grabbing;
+/* setinha que liga o rotulo ao ponto do reator (desenhada no cartao inteiro) */
+.reator-setas {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.seta-linha {
+    fill: none;
+    stroke: var(--acc);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+}
+
+.seta-ponta {
+    fill: var(--acc);
+    opacity: 0;
+}
+
+.seta-alvo {
+    fill: var(--acc);
+    stroke: #071b20;
+    stroke-width: 2;
+}
+
+.seta-pulso {
+    fill: none;
+    stroke: var(--acc);
+    stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: seta-pulso 1.6s ease-out infinite;
+}
+
+.seta-rotulo {
+    position: absolute;
+    z-index: 3;
+    max-width: 200px;
+    padding: 9px 13px;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: #9cbdb8;
+    background: rgba(7, 27, 32, 0.94);
+    border: 1.5px solid var(--acc);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.seta-rotulo strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: #e9f8f4;
+}
+
+.viewer.mostrando .reator-setas {
+    opacity: 1;
+}
+
+/* o rotulo ja mostra o texto; a legenda continua so para leitores de tela */
+.viewer.mostrando .viewer-dica {
+    opacity: 0;
+}
+
+.viewer.mostrando .seta-linha {
+    animation: seta-desenha 0.55s ease-out forwards;
+}
+
+.viewer.mostrando .seta-ponta {
+    animation: seta-aparece 0.2s ease-out 0.45s forwards;
+}
+
+.viewer.mostrando .seta-rotulo {
+    animation: seta-aparece 0.3s ease-out forwards;
+}
+
+/* com um sensor aberto o reator para de flutuar, para a seta nao desalinhar */
+.viewer.mostrando .reator-palco {
+    animation-play-state: paused;
+}
+
+@keyframes seta-desenha {
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes seta-aparece {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes seta-pulso {
+    from { transform: scale(1); opacity: 0.9; }
+    to { transform: scale(3.2); opacity: 0; }
+}
+
+.viewer-dica {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    z-index: 2;
+    font-size: 0.86rem;
+    text-align: center;
+    color: #9cbdb8;
+}
+
+/* sombra no chao, que encolhe quando o reator sobe */
+.viewer::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    width: 44%;
+    height: 28px;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
+    animation: sombra-flutua 6s ease-in-out infinite;
+}
+
+@keyframes reator-flutua {
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes sombra-flutua {
+    50% { scale: 0.85; opacity: 0.7; }
+}
+
+/* bolhas subindo pelo cartao */
+.bolhas i {
+    position: absolute;
+    left: var(--x);
+    bottom: -16px;
+    width: var(--s);
+    aspect-ratio: 1;
+    border: 1.5px solid rgba(162, 240, 94, 0.45);
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), transparent 60%);
+    opacity: 0;
+    animation: bolha var(--t) linear var(--d) infinite;
+}
+
+@keyframes bolha {
+    10% { opacity: 0.9; }
+    85% { opacity: 0.5; }
+    to { transform: translate(var(--w), -560px); opacity: 0; }
 }
 
 .viewer-badge {
@@ -1107,52 +1269,6 @@ input[type="range"]::-moz-range-thumb {
     border-radius: 4px;
 }
 
-.viewer-bar {
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 14px;
-    z-index: 2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.84rem;
-    color: #3b4a3a;
-    pointer-events: none;
-}
-
-.viewer-bar button {
-    pointer-events: auto;
-    padding: 7px 14px;
-    font: inherit;
-    font-weight: 700;
-    color: var(--ink);
-    background: transparent;
-    border: 1.5px solid var(--ink);
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.viewer-bar button:hover {
-    background: var(--ink);
-    color: #f1ecd9;
-}
-
-.no3d-msg {
-    display: none;
-    position: absolute;
-    inset: 0;
-    place-items: center;
-    padding: 30px;
-    text-align: center;
-    color: #3b4a3a;
-}
-
-#plk3d.no3d~.no3d-msg {
-    display: grid;
-}
-
 .sensores {
     display: grid;
     gap: 12px;
@@ -1163,11 +1279,38 @@ input[type="range"]::-moz-range-thumb {
     display: flex;
     gap: 16px;
     align-items: center;
+    width: 100%;
     padding: 16px 20px;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.sensor:hover {
+    border-color: var(--acc);
+}
+
+.sensor:focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 3px;
+}
+
+.sensor[aria-pressed="true"] {
+    border-color: var(--acc);
+    background-color: rgba(155, 219, 92, 0.1);
+}
+
+.sensor[aria-pressed="true"] .ico {
+    color: #071b20;
+    background: var(--acc);
+    border-color: var(--acc);
 }
 
 .sensor .ico {
     flex: none;
+    transition: background-color 0.2s, color 0.2s;
     width: 46px;
     height: 46px;
     display: grid;
@@ -1186,7 +1329,7 @@ input[type="range"]::-moz-range-thumb {
     font-size: 1.1rem;
 }
 
-.sensor span {
+.sensor-txt span {
     display: block;
     font-size: 0.88rem;
     line-height: 1.4;
@@ -1197,7 +1340,7 @@ input[type="range"]::-moz-range-thumb {
     margin-top: 6px;
 }
 
-/* ---------- Relatório / FAQ ---------- */
+/* ---------- Relatório ---------- */
 .relatorio {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1221,57 +1364,6 @@ input[type="range"]::-moz-range-thumb {
     background: rgba(255, 255, 255, 0.05);
     color: var(--fg);
     font-size: 0.97rem;
-}
-
-.faq {
-    max-width: 800px;
-    border-top: 1px solid var(--line);
-}
-
-.faq details.card {
-    padding: 0;
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--line);
-    border-radius: 0;
-}
-
-.faq summary {
-    list-style: none;
-    cursor: pointer;
-    padding: 22px 0;
-    font-family: var(--serif);
-    font-size: 1.25rem;
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-}
-
-.faq summary::-webkit-details-marker {
-    display: none;
-}
-
-.faq summary::after {
-    content: "+";
-    flex: none;
-    font-family: var(--sans);
-    font-size: 1.6rem;
-    font-weight: 300;
-    line-height: 1;
-    color: var(--acc);
-    transition: transform 0.25s;
-}
-
-.faq details[open] summary::after {
-    transform: rotate(45deg);
-}
-
-.faq details p {
-    padding: 0 0 24px;
-    max-width: 640px;
-    color: var(--fg-2);
 }
 
 /* ---------- Contato ---------- */
@@ -1663,7 +1755,10 @@ h3 {
 
 .viewer {
     border: 1px solid var(--line);
+    box-shadow: inset 0 0 80px rgba(162, 240, 94, 0.05);
     background:
+        radial-gradient(ellipse 42% 46% at 50% 50%, rgba(162, 240, 94, 0.18), transparent 70%),
+        radial-gradient(ellipse 75% 65% at 50% 62%, rgba(76, 201, 240, 0.1), transparent 75%),
         linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 100% 40px,
         linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 100%,
         #0a2227;
@@ -1673,23 +1768,6 @@ h3 {
     color: #a2f05e;
     background: rgba(7, 27, 32, 0.85);
     border: 1px solid #2f6a5a;
-}
-
-.viewer-bar,
-.no3d-msg {
-    color: #9cbdb8;
-}
-
-.viewer-bar button {
-    color: #e9f8f4;
-    background: rgba(7, 27, 32, 0.85);
-    border: 1px solid #2f6a5a;
-}
-
-.viewer-bar button:hover {
-    color: #e9f8f4;
-    background: rgba(7, 27, 32, 0.85);
-    border-color: #a2f05e;
 }
 
 .footer {

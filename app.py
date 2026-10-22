@@ -39,7 +39,7 @@ Regras:
   Se a pergunta fugir disso, diga com simpatia que só pode ajudar com o projeto.
 - Nunca invente informações. Se a resposta não estiver nas informações abaixo e você não tiver certeza,
   diga: "Não tenho as informações necessárias sobre isso." e sugira o e-mail de contato.
-- Quando fizer sentido, indique a seção do site (O reator, Simulador, Gráficos, Modelo 3D, Relatório, FAQ, Contato).
+- Quando fizer sentido, indique a seção do site (O reator, Simulador, Gráficos, Ver Plankton, Relatório, Contato).
 - Nunca diga que é o personagem original da Nickelodeon; você é só o mascote do projeto, uma homenagem escolar.
 
 Informações do projeto:
@@ -59,7 +59,8 @@ Informações do projeto:
 - Simulador: seção interativa em que a pessoa mexe em iluminação, temperatura e pH e roda 14 dias de cultivo.
   Há cenários rápidos (Oceano ideal, Deserto, Geladeira, Limonada, Breu total, Surpresa), a missão de chegar a 95%
   de eficiência e 6 conquistas. É um modelo didático simplificado (curva logística), não são medições reais.
-- Modelo 3D: o Plankton em 3D, que dá para girar arrastando. O modelo 3D do reator foi feito no Tinkercad.
+- Ver Plankton (seção Reator): mostra a foto do reator montado (base azul com flores da Fenda do Biquíni, tubo transparente com o
+  Plankton dentro, tampa verde com antenas e o Bob Esponja ao lado). O reator foi feito no Tinkercad.
 - Encomendas: preencher o formulário da seção Contato (nome, e-mail, aparência, uso, tamanho e detalhes).
   O aplicativo de e-mail abre com a mensagem pronta para enviar. Opções de aparência: pequeno e compacto, maior
   para produção ampliada, personalizado, ou ainda indefinido. Usos: escolar/educativo, pesquisa, cultivo de algas, outro.
@@ -90,7 +91,7 @@ def home():
 
 @app.route("/<path:arquivo>")
 def estaticos(arquivo):
-    if arquivo not in ("style.css", "script.js", "chatbot.css", "chatbot.js"):
+    if arquivo not in ("style.css", "script.js", "chatbot.css", "chatbot.js", "reator.png"):
         return "", 404
     return send_from_directory(BASE_DIR, arquivo)
 
