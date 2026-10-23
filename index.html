@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="icon"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23071b20'/%3E%3Ccircle cx='16' cy='17' r='10' fill='%235fb336' stroke='%230a140d' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='5.5' fill='%23fff'/%3E%3Ccircle cx='17' cy='15.5' r='2.6' fill='%235ab04a'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="style.css?v=1791992006">
-    <link rel="stylesheet" href="chatbot.css">
+    <link rel="stylesheet" href="style.css?v=1792793720">
+    <link rel="stylesheet" href="chatbot.css?v=1792793720">
 </head>
 
 <body>
@@ -38,9 +38,8 @@
                 <a href="#reator">O reator</a>
                 <a href="#simulador">Simulador</a>
                 <a href="#graficos">Gráficos</a>
-                <a href="#modelo">Modelo 3D</a>
+                <a href="#modelo">Ver Plankton</a>
                 <a href="#relatorio">Relatório</a>
-                <a href="#faq">FAQ</a>
                 <a href="#contato" class="nav-cta">Encomendar</a>
             </nav>
         </div>
@@ -59,7 +58,7 @@
                     </p>
                     <div class="hero-acoes reveal" style="--d:.24s">
                         <a href="#reator" class="botao">Conheça o projeto</a>
-                        <a href="#modelo" class="botao botao-ghost">Ver o Plankton em 3D</a>
+                        <a href="#modelo" class="botao botao-ghost">Ver Plankton</a>
                     </div>
                 </div>
                 <div class="hero-visual reveal" style="--d:.15s">
@@ -679,25 +678,60 @@
         <section id="modelo" class="section">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="etiqueta">05 · Modelo 3D</span>
-                    <h2>Modelo <span class="accent">3D</span></h2>
-                    <p class="subtitulo">O Plankton, mascote do projeto, em 3D. Arraste para girar e veja o olho dele seguir o seu mouse.</p>
+                    <span class="etiqueta">05 · Plankton 3D</span>
+                    <h2>Plankton <span class="accent">3D</span></h2>
+                    <p class="subtitulo">O reator do Earth Link no formato do Plankton, o mascote do projeto.</p>
                 </div>
                 <div class="modelo">
-                    <div class="card viewer reveal" aria-label="Visualizador 3D do Plankton">
-                        <span class="viewer-badge">3D interativo</span>
-                        <div id="plk3d"></div>
-                        <div class="no3d-msg"><p>Seu navegador não conseguiu iniciar o visualizador 3D (WebGL indisponível ou sem conexão com a biblioteca).</p></div>
-                        <div class="viewer-bar"><span>Arraste para girar</span><button type="button" id="plkReset">Resetar vista</button></div>
+                    <div class="card viewer vitrine reveal" aria-label="Reator Earth Link no formato do Plankton">
+                        <span class="viewer-badge">Plankton 3D</span>
+                        <div class="vit-cena" aria-hidden="true">
+                            <span class="bb" style="--x:11%;--s:18px;--t:9.2s;--d:-0.8s;--w:12px;--y:62%"><i></i></span>
+                            <span class="bb" style="--x:3%;--s:54px;--t:7.4s;--d:-7.4s;--w:12px;--y:76%"><i></i></span>
+                            <span class="bb" style="--x:32%;--s:54px;--t:7.3s;--d:-2.9s;--w:12px;--y:64%"><i></i></span>
+                            <span class="bb" style="--x:74%;--s:22px;--t:7.6s;--d:-7.4s;--w:12px;--y:62%"><i></i></span>
+                            <span class="bb" style="--x:12%;--s:28px;--t:10.0s;--d:-6.9s;--w:16px;--y:70%"><i></i></span>
+                            <span class="bb" style="--x:15%;--s:22px;--t:11.2s;--d:-3.2s;--w:16px;--y:80%"><i></i></span>
+                            <span class="bb" style="--x:93%;--s:18px;--t:7.7s;--d:-5.4s;--w:16px;--y:29%"><i></i></span>
+                            <span class="bb" style="--x:32%;--s:18px;--t:11.6s;--d:-7.4s;--w:16px;--y:28%"><i></i></span>
+                            <span class="bb" style="--x:79%;--s:18px;--t:12.0s;--d:-12.3s;--w:20px;--y:70%"><i></i></span>
+                            <span class="bb" style="--x:72%;--s:64px;--t:8.7s;--d:-5.0s;--w:16px;--y:65%"><i></i></span>
+                            <span class="bb" style="--x:3%;--s:64px;--t:7.4s;--d:-10.0s;--w:12px;--y:85%"><i></i></span>
+                            <span class="bb" style="--x:80%;--s:18px;--t:8.0s;--d:-5.2s;--w:16px;--y:83%"><i></i></span>
+                            <span class="bb" style="--x:91%;--s:54px;--t:12.9s;--d:-8.9s;--w:20px;--y:28%"><i></i></span>
+                            <span class="bb" style="--x:29%;--s:28px;--t:7.1s;--d:-10.8s;--w:12px;--y:17%"><i></i></span>
+                            <span class="bb" style="--x:70%;--s:42px;--t:12.7s;--d:-9.0s;--w:8px;--y:62%"><i></i></span>
+                            <span class="bb" style="--x:68%;--s:54px;--t:9.4s;--d:-5.1s;--w:20px;--y:43%"><i></i></span>
+                            <span class="bb" style="--x:20%;--s:64px;--t:8.0s;--d:-4.4s;--w:8px;--y:23%"><i></i></span>
+                            <span class="bb" style="--x:85%;--s:14px;--t:7.4s;--d:-2.7s;--w:20px;--y:16%"><i></i></span>
+                            <span class="bb" style="--x:65%;--s:28px;--t:10.5s;--d:-0.9s;--w:18px;--y:59%"><i></i></span>
+                            <span class="bb" style="--x:44%;--s:28px;--t:6.7s;--d:-2.1s;--w:24px;--y:6%"><i></i></span>
+                            <span class="bb" style="--x:38%;--s:36px;--t:10.5s;--d:-1.2s;--w:24px;--y:58%"><i></i></span>
+                            <span class="bb" style="--x:31%;--s:56px;--t:9.7s;--d:-3.9s;--w:10px;--y:31%"><i></i></span>
+                            <span class="bb" style="--x:60%;--s:44px;--t:7.8s;--d:-1.9s;--w:14px;--y:51%"><i></i></span>
+                            <span class="bb" style="--x:51%;--s:28px;--t:10.8s;--d:-3.1s;--w:18px;--y:78%"><i></i></span>
+                            <span class="bb" style="--x:33%;--s:36px;--t:6.9s;--d:-5.3s;--w:24px;--y:25%"><i></i></span>
+                            <span class="bb" style="--x:37%;--s:22px;--t:8.7s;--d:-7.4s;--w:14px;--y:79%"><i></i></span>
+                            <span class="bb" style="--x:34%;--s:16px;--t:8.1s;--d:-6.2s;--w:18px;--y:80%"><i></i></span>
+                            <span class="bb" style="--x:43%;--s:28px;--t:10.5s;--d:-6.0s;--w:24px;--y:75%"><i></i></span>
+                            <span class="bb" style="--x:38%;--s:22px;--t:6.5s;--d:-8.6s;--w:24px;--y:35%"><i></i></span>
+                            <span class="bb" style="--x:42%;--s:22px;--t:10.6s;--d:-6.5s;--w:24px;--y:26%"><i></i></span>
+                        </div>
+                        <div class="vit-foto">
+                            <img class="vit-img" src="img/plankton-reator.png" width="381" height="740" alt="Reator de algas em forma do Plankton: cúpula verde com antenas, tubo transparente e base azul decorada com flores">
+                            <div class="marcador" id="marcador" hidden>
+                                <span class="marcador-ponto"></span>
+                                <span class="marcador-seta"></span>
+                                <div class="marcador-caixa" role="status" aria-live="polite"><strong></strong><p></p></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="sensores">
-                        <div class="card sensor reveal" style="--d:.05s"><div class="ico">pH</div><div><strong>pH</strong><span>Acompanhamento da acidez do cultivo.</span></div></div>
-                        <div class="card sensor reveal" style="--d:.1s"><div class="ico">°C</div><div><strong>Temperatura</strong><span>Acompanhamento térmico do reator.</span></div></div>
-                        <div class="card sensor reveal" style="--d:.15s"><div class="ico">lux</div><div><strong>Iluminação</strong><span>Luz disponível para a fotossíntese.</span></div></div>
-                        <div class="card sensor reveal" style="--d:.2s"><div class="ico">bio</div><div><strong>Biomassa</strong><span>Crescimento das algas ao longo do tempo.</span></div></div>
-                        <a class="botao botao-ghost reveal"
-                            href="https://www.tinkercad.com/things/8X7OVJnuPBC-earth-link/edit?returnTo=%2Fthings%2F8X7OVJnuPBC-earth-link&sharecode=8dwm6I2OkcQvpH1liBf6PUUvizp5k4HqW32IdZRSRoo"
-                            target="_blank" rel="noopener noreferrer">Abrir o reator no Tinkercad ↗</a>
+                        <p class="sensores-dica">Toque em uma função para ver onde ela fica no reator.</p>
+                        <button type="button" class="card sensor reveal" style="--d:.05s" data-sensor="ph" aria-pressed="false"><span class="ico">pH</span><span><strong>pH</strong><span>Acompanhamento da acidez do cultivo.</span></span></button>
+                        <button type="button" class="card sensor reveal" style="--d:.1s" data-sensor="temp" aria-pressed="false"><span class="ico">°C</span><span><strong>Temperatura</strong><span>Acompanhamento térmico do reator.</span></span></button>
+                        <button type="button" class="card sensor reveal" style="--d:.15s" data-sensor="luz" aria-pressed="false"><span class="ico">lux</span><span><strong>Iluminação</strong><span>Luz disponível para a fotossíntese.</span></span></button>
+                        <button type="button" class="card sensor reveal" style="--d:.2s" data-sensor="bio" aria-pressed="false"><span class="ico">bio</span><span><strong>Biomassa</strong><span>Crescimento das algas ao longo do tempo.</span></span></button>
                     </div>
                 </div>
             </div>
@@ -747,31 +781,11 @@
             </div>
         </section>
 
-        <!-- FAQ -->
-        <section id="faq" class="section">
-            <div class="container">
-                <div class="section-head reveal">
-                    <span class="etiqueta">07 · Dúvidas</span>
-                    <h2>Perguntas <span class="accent">frequentes</span></h2>
-                </div>
-                <div class="faq">
-                    <details class="card reveal"><summary>O que é um reator de algas?</summary>
-                        <p>É um recipiente que mantém luz, temperatura, nutrientes e pH em condições adequadas para cultivar algas de forma controlada.</p></details>
-                    <details class="card reveal"><summary>Por que algas são importantes?</summary>
-                        <p>Algas e fitoplâncton fazem fotossíntese, produzem oxigênio, absorvem CO₂ e são a base da cadeia alimentar marinha.</p></details>
-                    <details class="card reveal"><summary>Os dados do site são reais?</summary>
-                        <p>Sim, os gráficos mostram o acompanhamento do cultivo. A exceção é o simulador interativo: ele é um modelo didático, e a curva é calculada por uma fórmula simples para você explorar como luz, temperatura e pH influenciam o crescimento.</p></details>
-                    <details class="card reveal"><summary>Como encomendar um reator?</summary>
-                        <p>Preencha o formulário de contato abaixo. Seu aplicativo de e-mail abrirá com a mensagem pronta para enviar.</p></details>
-                </div>
-            </div>
-        </section>
-
         <!-- CONTATO -->
         <section id="contato" class="section alt">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="etiqueta">08 · Contato</span>
+                    <span class="etiqueta">07 · Contato</span>
                     <h2>Encomende seu <span class="accent">reator de algas</span></h2>
                     <p class="subtitulo">Conte como você imagina o reator e quais seriam suas necessidades.</p>
                 </div>
@@ -780,7 +794,7 @@
                         <h3>Vamos conversar sobre sua ideia?</h3>
                         <p>Preencha o formulário para preparar uma mensagem sobre a encomenda.</p>
                         <p><strong>E-mail para contato:</strong></p>
-                        <a class="email-contato" href="mailto:rm13469@fiap.com.br">rm13469@fiap.com.br</a>
+                        <a class="email-contato" href="mailto:contato@earthlink-projeto.com.br">contato@earthlink-projeto.com.br</a>
                         <p>Ao enviar, seu aplicativo de e-mail será aberto com as respostas preenchidas.</p>
                     </div>
                     <form class="card form-contato reveal" id="formContato" style="--d:.1s">
@@ -836,14 +850,13 @@
                     <ul>
                         <li><a href="#reator">O reator</a></li>
                         <li><a href="#simulador">Simulador</a></li>
-                        <li><a href="#modelo">Modelo 3D</a></li>
-                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#modelo">Ver Plankton</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Contato</h4>
                     <ul>
-                        <li><a href="mailto:rm13469@fiap.com.br">rm13469@fiap.com.br</a></li>
+                        <li><a href="mailto:contato@earthlink-projeto.com.br">contato@earthlink-projeto.com.br</a></li>
                         <li><a href="#contato">Fazer encomenda</a></li>
                     </ul>
                 </div>
@@ -855,9 +868,8 @@
 
     <button type="button" class="anim-btn" id="animBtn" aria-pressed="false">Pausar animações</button>
     <a href="#inicio" class="topo" id="topo" aria-label="Voltar ao topo">↑</a>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="script.js?v=1791992006"></script>
-    <script src="chatbot.js"></script>
+    <script src="script.js?v=1792793720"></script>
+    <script src="chatbot.js?v=1792793720"></script>
 </body>
 
 </html>

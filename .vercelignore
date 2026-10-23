@@ -1,0 +1,6 @@
+.env
+.env.*
+app.py
+chatbox.py
+__pycache__/
+*.pyc

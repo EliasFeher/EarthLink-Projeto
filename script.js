@@ -304,164 +304,6 @@
     addEventListener("resize", () => drawAll());
     shown = 0; update();
 
-    /* ---------- Plankton 3D (Three.js) ---------- */
-    (() => {
-        const box = $("#plk3d");
-        if (!box) return;
-        const fail = () => box.classList.add("no3d");
-        if (!window.THREE) return fail();
-        const T = THREE;
-        let renderer;
-        try { renderer = new T.WebGLRenderer({ antialias: true, alpha: true }); } catch (_) { return fail(); }
-        renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-        box.appendChild(renderer.domElement);
-
-        const scene = new T.Scene();
-        const camera = new T.PerspectiveCamera(32, 1, 0.1, 100);
-        camera.position.set(0, 0.1, 11);
-        camera.lookAt(0, 0, 0);
-        scene.add(new T.AmbientLight(0xffffff, 0.5));
-        const sun = new T.DirectionalLight(0xffffff, 0.55);
-        sun.position.set(3, 5, 6);
-        scene.add(sun);
-
-        // cores do Plankton original: pele verde, contornos e pálpebra verde-escuros
-        const SKIN = 0x3f9e36, DARK = 0x1b5e26, LINE = 0x14451e, IRIS = 0x5ab04a;
-        const outMat = new T.MeshBasicMaterial({ color: LINE, side: T.BackSide });
-        const toon = c => new T.MeshToonMaterial({ color: c });
-        const part = (geo, color, pos, scale, parent, outline = 1.06) => {
-            const m = new T.Mesh(geo, toon(color));
-            m.position.set(...pos);
-            if (scale) m.scale.set(...scale);
-            parent.add(m);
-            if (outline) { const o = new T.Mesh(geo, outMat); o.scale.setScalar(outline); m.add(o); }
-            return m;
-        };
-        const sph = new T.SphereGeometry(1, 48, 32);
-
-        const plk = new T.Group();
-        scene.add(plk);
-
-        // corpo em formato de pera (mais largo embaixo, estreito em cima)
-        const pts = [];
-        for (let i = 0; i <= 24; i++) { const th = -Math.PI / 2 + (i / 24) * (Math.PI / 2); pts.push(new T.Vector2(Math.max(0.001, Math.cos(th)), -0.1 + 1.05 * Math.sin(th))); }
-        for (let i = 1; i <= 24; i++) { const th = (i / 24) * (Math.PI / 2); pts.push(new T.Vector2(Math.max(0.001, Math.cos(th) * (1 - 0.3 * Math.sin(th))), -0.1 + 1.35 * Math.sin(th))); }
-        part(new T.LatheGeometry(pts, 56), SKIN, [0, 0, 0], null, plk, 1.045);
-        [[-0.45, -0.7, 0.62, 0.09], [0.5, -0.55, 0.62, 0.1], [0.2, -0.95, 0.5, 0.07]]
-            .forEach(([x, y, z, r]) => part(sph, DARK, [x, y, z], [r, r, r * 0.35], plk, 0));
-
-        // olho único gigante com pálpebra pesada
-        const eye = new T.Group();
-        eye.position.set(0, 0.42, 0.6);
-        plk.add(eye);
-        part(sph, 0xffffff, [0, 0, 0], [0.64, 0.68, 0.38], eye, 1.07);
-        const iris = new T.Group();
-        iris.position.set(0.05, -0.08, 0.37);
-        eye.add(iris);
-        part(sph, IRIS, [0, 0, 0], [0.33, 0.33, 0.1], iris, 1.1);
-        part(sph, 0x000000, [0.01, 0, 0.08], [0.17, 0.17, 0.05], iris, 0);
-        part(sph, 0xffffff, [0.08, 0.08, 0.12], [0.05, 0.05, 0.03], iris, 0);
-        const lid = new T.Mesh(new T.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.33), toon(DARK));
-        lid.scale.set(0.68, 0.72, 0.42);
-        lid.rotation.z = -0.3;
-        lid.position.z = 0.01;
-        eye.add(lid);
-
-        // boca pequena e esperta
-        const mouth = part(new T.TorusGeometry(0.28, 0.04, 8, 24, Math.PI), LINE, [0.02, -0.38, 0.84], null, plk, 0);
-        mouth.rotation.z = Math.PI + 0.12;
-
-        // antenas finas com bolinha na ponta
-        const stalk = new T.CylinderGeometry(0.035, 0.035, 0.9, 10);
-        [-1, 1].forEach(s => {
-            const a = part(stalk, DARK, [s * 0.2, 1.6, 0], null, plk, 0);
-            a.rotation.z = -s * 0.45;
-            const tx = s * 0.2 - Math.sin(a.rotation.z) * 0.45, ty = 1.6 + Math.cos(a.rotation.z) * 0.45;
-            part(sph, SKIN, [tx, ty, 0], [0.1, 0.1, 0.1], plk, 1.3);
-        });
-
-        // pernas e pés finos
-        const leg = new T.CylinderGeometry(0.05, 0.05, 0.9, 10);
-        [-0.35, 0.35].forEach(x => {
-            part(leg, DARK, [x, -1.6, 0], null, plk, 0);
-            part(sph, DARK, [x + (x < 0 ? -0.08 : 0.08), -2.05, 0.08], [0.2, 0.07, 0.3], plk, 0);
-        });
-
-        // braços de palito (pivô no ombro)
-        const armGeo = new T.CylinderGeometry(0.05, 0.05, 0.9, 10);
-        const arm = (x, rz) => {
-            const g = new T.Group();
-            g.position.set(x, -0.15, 0);
-            g.rotation.z = rz;
-            part(armGeo, DARK, [0, 0.45, 0], null, g, 1.3);
-            part(sph, SKIN, [0, 0.95, 0], [0.12, 0.12, 0.12], g, 1.3);
-            plk.add(g);
-            return g;
-        };
-        const armL = arm(-0.88, 0.8);
-        const armR = arm(0.88, -2.2);
-
-        const shadow = new T.Mesh(new T.CircleGeometry(1, 40), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3 }));
-        shadow.rotation.x = -Math.PI / 2;
-        shadow.position.y = -2.15;
-        shadow.scale.set(1.4, 0.55, 1);
-        scene.add(shadow);
-
-        const resize = () => {
-            const w = box.clientWidth, h = box.clientHeight;
-            if (!w || !h) return;
-            renderer.setSize(w, h, false);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        };
-        new ResizeObserver(resize).observe(box);
-        resize();
-
-        let ry = 0, vy = 0, dragging = false, lastX = 0, lastMove = 0;
-        const el = renderer.domElement;
-        el.addEventListener("pointerdown", e => { dragging = true; lastX = e.clientX; vy = 0; el.setPointerCapture(e.pointerId); });
-        el.addEventListener("pointermove", e => {
-            if (!dragging) return;
-            vy = (e.clientX - lastX) * 0.012; ry += vy; lastX = e.clientX; lastMove = performance.now();
-        });
-        const end = () => (dragging = false);
-        el.addEventListener("pointerup", end);
-        el.addEventListener("pointercancel", end);
-        $("#plkReset").addEventListener("click", () => { ry = 0; vy = 0; lastMove = 0; });
-        const look = { x: 0, y: 0 };
-        addEventListener("pointermove", e => {
-            look.x = (e.clientX / innerWidth) * 2 - 1;
-            look.y = (e.clientY / innerHeight) * 2 - 1;
-        }, { passive: true });
-
-        let visible = true, raf;
-        const frame = t => {
-            const s = t / 1000;
-            if (!dragging) {
-                ry += vy; vy *= 0.94;
-                if (!reduce && performance.now() - lastMove > 1500) ry += (Math.sin(s * 0.6) * 0.5 - ry) * 0.02;
-            }
-            plk.rotation.y = ry;
-            plk.position.y = reduce ? 0 : Math.sin(s * 2) * 0.06;
-            shadow.scale.set(1.4 - plk.position.y * 0.8, 0.55 - plk.position.y * 0.3, 1);
-            armL.rotation.z = 0.8 + (reduce ? 0 : Math.sin(s * 5) * 0.28);
-            iris.position.x += (0.05 + look.x * 0.16 - iris.position.x) * 0.12;
-            iris.position.y += (-0.1 - look.y * 0.1 - iris.position.y) * 0.12;
-            renderer.render(scene, camera);
-            if (visible && !reduce) raf = requestAnimationFrame(frame);
-        };
-        frame(performance.now());
-        new IntersectionObserver(([e]) => {
-            visible = e.isIntersecting;
-            cancelAnimationFrame(raf);
-            if (visible) raf = requestAnimationFrame(frame);
-        }).observe(box);
-        if (reduce) {
-            frame(0);
-            el.addEventListener("pointermove", () => frame(performance.now()));
-        }
-    })();
-
     /* ---------- Plankton do hero: cena animada em estilo de desenho (12 quadros/s) ---------- */
     (() => {
         const svg = $("#heroSvg");
@@ -627,6 +469,30 @@
         requestAnimationFrame(tick);
     })();
 
+    /* ---------- Funções do reator: seta na foto ---------- */
+    // x/y = posição na foto (em %); lado = para onde a caixa de texto abre.
+    const SENSORES = {
+        ph:   { x: 37, y: 69, lado: "esq", titulo: "Sensor de pH", texto: "Fica mergulhado na água do tubo e mede a acidez do cultivo. Se o pH sai da faixa, as algas crescem menos." },
+        temp: { x: 68, y: 49, lado: "dir", titulo: "Temperatura", texto: "Fica na parede do tubo e acompanha o calor do reator, para a água não esquentar nem esfriar demais." },
+        luz:  { x: 50, y: 38, lado: "dir", titulo: "Iluminação", texto: "Fica na cúpula, por onde chega a luz que as algas usam para fazer fotossíntese." },
+        bio:  { x: 33, y: 47, lado: "esq", titulo: "Biomassa", texto: "Observada dentro do tubo transparente: quanto mais verde a água, mais algas cresceram." }
+    };
+    const marcador = $("#marcador"), botoesSensor = $$("[data-sensor]");
+    if (marcador) botoesSensor.forEach(btn => btn.addEventListener("click", () => {
+        const ativo = btn.getAttribute("aria-pressed") === "true";
+        botoesSensor.forEach(b => b.setAttribute("aria-pressed", "false"));
+        if (ativo) { marcador.hidden = true; return; }
+        const s = SENSORES[btn.dataset.sensor];
+        btn.setAttribute("aria-pressed", "true");
+        marcador.style.setProperty("--x", s.x + "%");
+        marcador.style.setProperty("--y", s.y + "%");
+        marcador.className = "marcador " + s.lado;
+        $("strong", marcador).textContent = s.titulo;
+        $("p", marcador).textContent = s.texto;
+        // reinicia a animação de entrada
+        marcador.hidden = true; void marcador.offsetWidth; marcador.hidden = false;
+    }));
+
     /* ---------- Botão: pausar animações ---------- */
     const animBtn = $("#animBtn");
     if (animBtn) animBtn.addEventListener("click", () => {
@@ -637,7 +503,7 @@
 
     /* ---------- Formulário ---------- */
     const form = $("#formContato"), status = $("#formStatus");
-    const DESTINO = "rm13469@fiap.com.br";
+    const DESTINO = "contato@earthlink-projeto.com.br";
     form.addEventListener("submit", e => {
         e.preventDefault();
         const v = id => $("#" + id).value.trim();

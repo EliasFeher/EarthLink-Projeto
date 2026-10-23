@@ -1,7 +1,8 @@
 (() => {
     "use strict";
-    // Em produção, defina window.EARTHLINK_CHAT_API = "https://seu-servidor/chat" antes deste script.
-    const API = window.EARTHLINK_CHAT_API || "/chat";
+    // Se o chat ficar em outro endereço, defina window.EARTHLINK_CHAT_API antes deste script.
+    const API = window.EARTHLINK_CHAT_API || "/api/chat";
+    const ESPERA_MAX = 35000; // ms
     const BOAS_VINDAS = "Oi! Eu sou o Plankton, mascote do Earth Link. Pergunte sobre o reator, as algas ou o simulador!";
 
     const abrir = document.createElement("button");
@@ -47,18 +48,31 @@
         enviar.disabled = true;
         bolha(texto, "eu");
         const espera = bolha("Plankton está pensando…", "bot pensando");
+        const corpo = JSON.stringify({ mensagem: texto, historico: historico.slice(-20) });
         let resposta;
-        try {
-            const r = await fetch(API, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ mensagem: texto, historico: historico.slice(-20) })
-            });
-            const d = await r.json().catch(() => ({}));
-            resposta = limpa(d.resposta || "Desculpe, não consegui responder agora.");
-            if (r.ok) historico.push({ role: "user", text: texto }, { role: "model", text: resposta });
-        } catch (_) {
-            resposta = "Não consegui falar com o servidor do chat. Confira se ele está ligado e tente de novo.";
+        // até 2 tentativas: cobre uma falha momentânea de rede
+        for (let tentativa = 1; tentativa <= 2 && !resposta; tentativa++) {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ESPERA_MAX);
+            try {
+                const r = await fetch(API, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: corpo,
+                    signal: ctrl.signal
+                });
+                const d = await r.json().catch(() => ({}));
+                if (d.resposta) {
+                    resposta = limpa(d.resposta);
+                    if (r.ok) historico.push({ role: "user", text: texto }, { role: "model", text: resposta });
+                } else if (r.status < 500 || tentativa === 2) {
+                    resposta = "Desculpe, não consegui responder agora. Tente de novo em instantes.";
+                }
+            } catch (_) {
+                if (tentativa === 2) resposta = "Estou sem conexão com o servidor agora. Confira sua internet e tente de novo.";
+            } finally {
+                clearTimeout(timer);
+            }
         }
         espera.className = "chat-msg bot";
         espera.textContent = resposta;

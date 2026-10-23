@@ -3785,3 +3785,242 @@ html {
     padding-top: 6px;
     opacity: 0.6;
 }
+
+/* ---------- Plankton 3D: foto do reator com animação ao redor ---------- */
+.vitrine {
+    display: grid;
+    place-items: center;
+    padding: 48px 16px 28px;
+}
+
+.vit-cena {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+
+
+
+
+
+
+
+.vit-img {
+    position: relative;
+    z-index: 1;
+    width: auto;
+    height: min(420px, 60svh);
+    filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.45));
+    animation: vit-flutuar 5s ease-in-out infinite;
+}
+
+
+
+
+
+@keyframes vit-flutuar {
+    50% { transform: translateY(-10px); }
+}
+
+/* ---------- Funções do reator: botões + marcador na foto ---------- */
+.vit-foto {
+    position: relative;
+    z-index: 1;
+    animation: vit-flutuar 5s ease-in-out infinite;
+}
+
+.vit-foto .vit-img {
+    display: block;
+    animation: none;
+}
+
+.sensores-dica {
+    margin: 0 0 2px;
+    font-size: 0.85rem;
+    color: var(--fg-2);
+}
+
+button.sensor {
+    width: 100%;
+    font: inherit;
+    text-align: left;
+    color: var(--fg);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+button.sensor strong {
+    color: var(--fg);
+}
+
+button.sensor:hover {
+    border-color: var(--acc);
+}
+
+button.sensor:focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 2px;
+}
+
+button.sensor[aria-pressed="true"] {
+    border-color: var(--acc);
+    background: rgba(162, 240, 94, 0.08);
+}
+
+button.sensor[aria-pressed="true"] .ico {
+    color: var(--btn-fg);
+    background: var(--acc);
+}
+
+.marcador {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 0;
+    height: 0;
+    z-index: 3;
+}
+
+.marcador[hidden] {
+    display: none;
+}
+
+.marcador-ponto {
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--acc);
+    border: 3px solid #071b20;
+    box-shadow: 0 0 0 0 rgba(162, 240, 94, 0.7);
+    animation: marcador-pulso 1.6s ease-out infinite;
+}
+
+.marcador-seta {
+    position: absolute;
+    top: -1.5px;
+    width: 56px;
+    height: 3px;
+    background: var(--acc);
+    border-radius: 2px;
+}
+
+/* ponta da seta, encostada no ponto */
+.marcador-seta::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    border: 6.5px solid transparent;
+}
+
+.marcador-caixa {
+    position: absolute;
+    top: 0;
+    width: min(190px, 38vw);
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: var(--fg);
+    background: rgba(7, 27, 32, 0.95);
+    border: 1.5px solid var(--acc);
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    transform: translateY(-50%);
+    animation: marcador-entra 0.3s ease-out;
+}
+
+.marcador-caixa strong {
+    display: block;
+    margin-bottom: 2px;
+    font-family: var(--serif);
+    color: var(--acc);
+}
+
+.marcador-caixa p {
+    margin: 0;
+    color: var(--fg-2);
+}
+
+.marcador.dir .marcador-seta { left: 12px; }
+.marcador.dir .marcador-seta::before { right: 100%; border-right-color: var(--acc); }
+.marcador.dir .marcador-caixa { left: 68px; }
+
+.marcador.esq .marcador-seta { right: 12px; }
+.marcador.esq .marcador-seta::before { left: 100%; border-left-color: var(--acc); }
+.marcador.esq .marcador-caixa { right: 68px; }
+
+@keyframes marcador-pulso {
+    to { box-shadow: 0 0 0 14px rgba(162, 240, 94, 0); }
+}
+
+@keyframes marcador-entra {
+    from { opacity: 0; transform: translateY(-50%) scale(0.9); }
+}
+
+/* bolhas no estilo do fundo do mar do Bob Esponja */
+.bb {
+    position: absolute;
+    left: var(--x);
+    bottom: calc(var(--s) * -1.2);
+    width: var(--s);
+    height: var(--s);
+    animation: bb-subir var(--t) linear infinite;
+    animation-delay: var(--d);
+}
+
+.bb i {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    background: radial-gradient(circle at 50% 55%, rgba(120, 210, 255, 0.08), rgba(120, 210, 255, 0.28) 70%, rgba(190, 235, 255, 0.45));
+    box-shadow: inset 0 0 calc(var(--s) * 0.15) rgba(255, 255, 255, 0.35);
+    animation: bb-balanco calc(var(--t) / 3) ease-in-out infinite alternate;
+    animation-delay: var(--d);
+}
+
+/* reflexo em meia-lua */
+.bb i::before {
+    content: "";
+    position: absolute;
+    left: 16%;
+    top: 14%;
+    width: 46%;
+    height: 46%;
+    border-radius: 50%;
+    border-top: max(2px, calc(var(--s) * 0.08)) solid rgba(255, 255, 255, 0.95);
+    border-left: max(2px, calc(var(--s) * 0.08)) solid rgba(255, 255, 255, 0.95);
+    border-right: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    transform: rotate(-8deg);
+}
+
+/* brilhinho */
+.bb i::after {
+    content: "";
+    position: absolute;
+    right: 22%;
+    bottom: 20%;
+    width: 12%;
+    height: 12%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes bb-subir {
+    to { transform: translateY(calc(-100% - 560px)); }
+}
+
+@keyframes bb-balanco {
+    from { transform: translateX(calc(var(--w) * -1)) scale(1, 0.96); }
+    to { transform: translateX(var(--w)) scale(0.96, 1); }
+}
+
+/* com as animações pausadas, as bolhas ficam paradas e espalhadas */
+.sem-anim .bb {
+    bottom: var(--y);
+}
