@@ -3953,12 +3953,34 @@ button.sensor[aria-pressed="true"] .ico {
 .marcador.esq .marcador-seta::before { left: 100%; border-left-color: var(--acc); }
 .marcador.esq .marcador-caixa { right: 68px; }
 
+/* no celular a foto é estreita: a caixa fica abaixo do ponto, sem seta lateral */
+@media (max-width: 600px) {
+    .marcador .marcador-seta { display: none; }
+    .marcador.dir .marcador-caixa,
+    .marcador.esq .marcador-caixa {
+        left: 0;
+        right: auto;
+        top: 16px;
+        width: 180px;
+        transform: translateX(-50%);
+        animation-name: marcador-entra-baixo;
+    }
+    .marcador.embaixo .marcador-caixa {
+        top: auto;
+        bottom: 16px;
+    }
+}
+
 @keyframes marcador-pulso {
     to { box-shadow: 0 0 0 14px rgba(162, 240, 94, 0); }
 }
 
 @keyframes marcador-entra {
     from { opacity: 0; transform: translateY(-50%) scale(0.9); }
+}
+
+@keyframes marcador-entra-baixo {
+    from { opacity: 0; transform: translateX(-50%) scale(0.9); }
 }
 
 /* bolhas no estilo do fundo do mar do Bob Esponja */

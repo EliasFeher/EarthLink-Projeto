@@ -486,7 +486,7 @@
         btn.setAttribute("aria-pressed", "true");
         marcador.style.setProperty("--x", s.x + "%");
         marcador.style.setProperty("--y", s.y + "%");
-        marcador.className = "marcador " + s.lado;
+        marcador.className = "marcador " + s.lado + (s.y > 55 ? " embaixo" : "");
         $("strong", marcador).textContent = s.titulo;
         $("p", marcador).textContent = s.texto;
         // reinicia a animação de entrada
