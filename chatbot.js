@@ -3,7 +3,7 @@
     // Se o chat ficar em outro endereço, defina window.EARTHLINK_CHAT_API antes deste script.
     const API = window.EARTHLINK_CHAT_API || "/api/chat";
     const ESPERA_MAX = 35000; // ms
-    const BOAS_VINDAS = "Oi! Eu sou o Plankton, mascote do Earth Link. Pergunte sobre o reator, as algas ou o simulador!";
+    const BOAS_VINDAS = "Oi! Eu sou o Plankton, mascote da Earth Link. Pergunte sobre o BioPulse, nossa árvore líquida, as algas ou o simulador!";
 
     const abrir = document.createElement("button");
     abrir.type = "button";
@@ -17,7 +17,7 @@
     painel.hidden = true;
     painel.setAttribute("aria-label", "Chat com o Plankton");
     painel.innerHTML =
-        '<header class="chat-topo"><strong>Plankton</strong><span>assistente do Earth Link</span>' +
+        '<header class="chat-topo"><strong>Plankton</strong><span>assistente da Earth Link</span>' +
         '<button type="button" class="chat-fechar" aria-label="Fechar chat">×</button></header>' +
         '<div class="chat-msgs" role="log" aria-live="polite"></div>' +
         '<form class="chat-form" autocomplete="off">' +
